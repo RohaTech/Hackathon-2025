@@ -1,9 +1,8 @@
 <script setup>
-import UserLayout from '@/layout/UserLayout.vue';
-
+import UserLayout from "@/layout/UserLayout.vue";
 </script>
 
 <template>
   <UserLayout />
-  HomeView
+  <p class="text-red-500">HomeView</p>
 </template>
