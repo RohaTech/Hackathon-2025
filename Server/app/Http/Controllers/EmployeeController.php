@@ -11,12 +11,12 @@ class EmployeeController extends Controller
     public function index()
     {
         
-        $employees = Employee::all();
+        $employees = Employee::with('account')->get();
         return response()->json($employees);
     }
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::with('account')->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
         }
