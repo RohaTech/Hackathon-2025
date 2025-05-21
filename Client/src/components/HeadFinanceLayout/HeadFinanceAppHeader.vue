@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import HeadFinanceSearchBarFinanceSearchBar from "./HeadFinanceSearchBar.vue";
-import HeadFinanceUserMenu from "./HeadFinanceNotificationMenu.vue";
-import HeadFinanceUserMenu from "./HeadFinanceUserMenu.vue";
 import Logo from "../UI/Logo.vue";
 import { useSidebar } from "@/composables/useSidebar";
+import HeadFinanceNotificationMenu from "./HeadFinanceNotificationMenu.vue";
+import HeadFinanceUserMenu from "./HeadFinanceUserMenu.vue";
 
 const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar();
 
@@ -97,7 +97,7 @@ const toggleApplicationMenu = () => {
             />
           </svg>
         </button>
-        <HeadFinanceSearchBarFinanceSearchBar />
+        <span class="font-semibold text-xl">Head Finance Officer</span>
       </div>
 
       <div
@@ -106,7 +106,7 @@ const toggleApplicationMenu = () => {
       >
         <div class="2xsm:gap-3 flex items-center gap-2">
           <div class=""></div>
-          <HeadFinanceUserMenu />
+          <HeadFinanceNotificationMenu />
         </div>
         <HeadFinanceUserMenu />
       </div>

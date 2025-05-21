@@ -42,7 +42,7 @@ const menuGroups = [
       },
       {
         icon: ListIcon,
-        name: "Payment",
+        name: "Payroll",
         path: "FinancePayment",
       },
     ],
