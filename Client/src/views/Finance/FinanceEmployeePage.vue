@@ -160,17 +160,17 @@ const saveEditEmployee = async () => {
                   />
                 </svg>
                 <p class="mt-2 text-base text-gray-500">
-                  No doctors found with status:
+                  No Employee found!
                   <span class="font-medium capitalize">{{
                     selectedStatus
                   }}</span>
                 </p>
-                <button
+                <!-- <button
                   @click="changeStatus('all')"
                   class="mt-4 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
-                  Show All Doctors
-                </button>
+                  Show All Employee
+                </button> -->
               </div>
             </td>
           </tr>
