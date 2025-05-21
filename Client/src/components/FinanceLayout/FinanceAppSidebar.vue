@@ -45,6 +45,11 @@ const menuGroups = [
         name: "Payroll",
         path: "FinancePayment",
       },
+      {
+        icon: TableIcon,
+        name: "Allowance",
+        path: "FinanceAllowance",
+      },
     ],
   },
 ];
