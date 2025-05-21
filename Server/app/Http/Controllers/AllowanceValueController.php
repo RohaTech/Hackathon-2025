@@ -13,7 +13,8 @@ class AllowanceValueController extends Controller
      */
     public function index()
     {
-        //
+        $allowances = AllowanceValue::all();
+        return response()->json($allowances);
     }
 
     /**
@@ -56,16 +57,40 @@ class AllowanceValueController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AllowanceValue $allowanceValue)
+    public function update(Request $request,   $id)
     {
-        //
+
+        $allowanceValue = AllowanceValue::find($id);
+
+        $validatedData = $request->validate([
+            'allowances_name' => 'sometimes|string|required|max:255',
+            'ceo' => 'sometimes|numeric|nullable',
+            'coo' => 'sometimes|numeric|nullable',
+            'cto' => 'sometimes|numeric|nullable',
+            'ciso' => 'sometimes|numeric|nullable',
+            'director' => 'sometimes|numeric|nullable',
+            'dept_lead' => 'sometimes|numeric|nullable',
+            'normal_employee' => 'sometimes|numeric|nullable',
+            'positioned' => 'sometimes|numeric|nullable',
+            'non_positioned' => 'sometimes|numeric|nullable',
+
+        ]);
+
+        $allowanceValue->update($validatedData);
+
+        return response()->json([
+            'message' => 'Allowance updated successfully',
+            'allowance' => $allowanceValue
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AllowanceValue $allowanceValue)
+    public function destroy($id)
     {
-        //
+
+        $allowanceValue = AllowanceValue::find($id);
+        return $allowanceValue->delete();
     }
 }

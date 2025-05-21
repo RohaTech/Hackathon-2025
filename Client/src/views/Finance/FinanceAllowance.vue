@@ -1,19 +1,23 @@
 <script setup>
 import Modal from "@/components/UI/Modal.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { useAllowanceStore } from "@/stores/allowanceStore";
 import FinanceLayout from "@/layout/FinanceLayout.vue";
 import { useAllowanceValueStore } from "@/stores/allowanceValueStore";
 
 const isAddAllowanceModal = ref(false);
 const isAllowanceDetail = ref(false);
+const allowances = ref([]);
 const selectedAllowanceValue = ref([]);
+const selectedAllowance = ref([]);
 const {
   createAllowanceValue,
   getAllAllowanceValues,
   updateAllowanceValue,
   deleteAllowanceValue,
 } = useAllowanceValueStore();
+
+const { getAllAllowances } = useAllowanceStore();
 
 const formData = ref({
   allowances_name: "",
@@ -45,6 +49,12 @@ const allowancesValue = ref([]);
 
 onMounted(async () => {
   allowancesValue.value = await getAllAllowanceValues();
+  allowances.value = await getAllAllowances();
+  console.log(allowances.value);
+  console.log(allowancesValue.value);
+});
+onMounted(async () => {
+  allowancesValue.value = await getAllAllowanceValues();
   console.log(allowancesValue.value);
 });
 
@@ -71,8 +81,19 @@ const HandleDeleteAllowance = async () => {
   console.log("Allowance Deleted");
   isAllowanceDetail.value = false;
 };
-const handleToggle = () => {
-  withPosition.value = !withPosition.value;
+
+const openDetailPopup = (allowance) => {
+  selectedAllowanceValue.value = allowance;
+  isAllowanceDetail.value = true;
+  updatedAllowanceValueData.value = selectedAllowanceValue.value;
+  console.log(updatedAllowanceValueData.value);
+};
+
+watchEffect(() => {
+  console.log(selectedAllowance.value);
+
+  formData.value.allowances_name = selectedAllowance.value.allowances_name;
+
   formData.value.ceo = null;
   formData.value.coo = null;
   formData.value.cto = null;
@@ -82,14 +103,13 @@ const handleToggle = () => {
   formData.value.normal_employee = null;
   formData.value.non_positioned = null;
   formData.value.positioned = null;
-};
 
-const openDetailPopup = (allowance) => {
-  selectedAllowanceValue.value = allowance;
-  isAllowanceDetail.value = true;
-  updatedAllowanceValueData.value = selectedAllowanceValue.value;
-  console.log(updatedAllowanceValueData.value);
-};
+  if (selectedAllowance.value.positioned == null) {
+    withPosition.value = true;
+  } else if (selectedAllowance.value.positioned >= 0) {
+    withPosition.value = false;
+  }
+});
 </script>
 
 <template>
@@ -101,7 +121,7 @@ const openDetailPopup = (allowance) => {
         @click="isAddAllowanceModal = true"
         class="bg-white px-4 py-3 text-sm text-gray-700 ring-1 ring-inset ring-gray-300 ark:bg-gray-800 ark:text-gray-400 ark:ring-gray-700 ark:hover:bg-white/[0.03] ark:hover:text-gray-300 inline-flex items-center justify-center font-medium gap-2 rounded-lg transition w-fit ml-auto mr-6 hover:bg-[#f3a21b] hover:text-white"
       >
-        New Allowance
+        Add Allowance Value
       </button>
     </div>
 
@@ -135,52 +155,32 @@ const openDetailPopup = (allowance) => {
             <h4
               class="mb-2 text-2xl font-semibold text-gray-800 ark:text-white/90"
             >
-              Add New Allowance
+              Add Allowance Value
             </h4>
           </div>
 
-          <div class="flex gap-x-10 items-center my-6">
-            <div
-              class="flex gap-x-2 items-center cursor-pointer"
-              @click="handleToggle"
-            >
-              <div
-                class="rounded-full size-5 border-2 border-black"
-                :class="{ 'bg-[#0a5098] border-none': withPosition }"
-              ></div>
-              <span class="text-sm lowercase">With Specific Position</span>
-            </div>
-            <div
-              class="flex gap-x-2 items-center cursor-pointer"
-              @click="handleToggle"
-            >
-              <div
-                class="rounded-full size-5 border-2 border-black"
-                :class="{ 'bg-[#0a5098] border-none': !withPosition }"
-              ></div>
-              <span class="text-sm lowercase">Positioned/Non Positioned</span>
-            </div>
-          </div>
           <form class="flex flex-col mt-8">
             <div class="px-2 overflow-y-auto custom-scrollbar">
               <div class="my-4">
-                <label for="name" class="mb-1 block text-sm text-[#0F172A]">
-                  Allowance Name <span class="text-red-500">*</span>
-                </label>
-                <input
-                  id="name"
-                  v-model="formData.allowances_name"
-                  type="text"
-                  class="ark:bg-dark-900 focus:outline-hidden ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
-                  placeholder="Enter Allowance Name"
-                  required
-                />
-                <!-- <p
-                  v-if="errors?.name"
-                  class="mt-2 text-xs font-semibold text-red-500"
+                <label
+                  class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                 >
-                  {{ errors.name }}
-                </p> -->
+                  Allowance Type
+                </label>
+
+                <select
+                  v-model="selectedAllowance"
+                  class="w-full border rounded px-3 py-2 capitalize"
+                >
+                  <option
+                    v-for="(allowance, index) in allowances"
+                    :key="index"
+                    :value="allowance"
+                    class="capitalize"
+                  >
+                    {{ allowance.allowances_name }}
+                  </option>
+                </select>
               </div>
 
               <div
@@ -412,12 +412,7 @@ const openDetailPopup = (allowance) => {
                       d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  <p class="mt-2 text-base text-gray-500">
-                    No Allowance found
-                    <span class="font-medium capitalize">{{
-                      selectedStatus
-                    }}</span>
-                  </p>
+                  <p class="mt-2 text-base text-gray-500">No Allowance found</p>
                 </div>
               </td>
             </tr>
