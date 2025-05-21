@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payroll;
-use App\Http\Requests\StorePayrollRequest;
-use App\Http\Requests\UpdatePayrollRequest;
+use Illuminate\Http\Request;
 
 class PayrollController extends Controller
 {
@@ -19,7 +18,7 @@ class PayrollController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePayrollRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,7 +34,7 @@ class PayrollController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePayrollRequest $request, Payroll $payroll)
+    public function update(Request $request, Payroll $payroll)
     {
         //
     }
