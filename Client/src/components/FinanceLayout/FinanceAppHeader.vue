@@ -97,6 +97,7 @@ const toggleApplicationMenu = () => {
             />
           </svg>
         </button>
+        <span class="font-semibold text-xl">Finance Officer</span>
       </div>
 
       <div
