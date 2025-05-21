@@ -2,30 +2,30 @@
 import Modal from "@/components/UI/Modal.vue";
 import FinanceLayout from "@/layout/FinanceLayout.vue";
 import { useEmployeeStore } from "@/stores/employee";
+import { usePayrollStore } from "@/stores/payrollStore";
 import { onMounted, ref } from "vue";
 
 const isAddPaymentModal = ref(false);
 const { getEmployees } = useEmployeeStore();
+const { createPayroll } = usePayrollStore();
+
+const employees = ref([]);
 
 onMounted(async () => {
-  getEmployees;
+  employees.value = await getEmployees();
+  console.log(employees.value);
 });
 
 const formData = ref({
-  allowances_name: "",
-  ceo: null,
-  coo: null,
-  cto: null,
-  ciso: null,
-  director: null,
-  dept_lead: null,
-  normal_employee: null,
-  positioned: null,
-  non_positioned: null,
+  employee_id: "",
+  working_days: "",
+  other_commissions: "",
+  loan_or_penality: "",
 });
 
-const saveProfile = () => {
-  // Implement save profile logic here
+const saveProfile = async () => {
+  console.log(formData.value);
+  await createPayroll(formData.value);
   console.log("Profile saved");
   isProfileInfoModal.value = false;
 };
@@ -86,20 +86,20 @@ const saveProfile = () => {
                 <label
                   class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                 >
-                  Allowance Type
+                  Employee
                 </label>
 
                 <select
-                  v-model="selectedAllowance"
+                  v-model="formData.employee_id"
                   class="w-full border rounded px-3 py-2 capitalize"
                 >
                   <option
-                    v-for="(allowance, index) in allowances"
+                    v-for="(employee, index) in employees"
                     :key="index"
-                    :value="allowance"
+                    :value="employee.id"
                     class="capitalize"
                   >
-                    {{ allowance.allowances_name }}
+                    {{ employee.name }}
                   </option>
                 </select>
               </div>
@@ -111,13 +111,13 @@ const saveProfile = () => {
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    Ceo
+                    Working Days
                   </label>
                   <input
                     type="number"
                     value="0"
                     required
-                    v-model="formData.ceo"
+                    v-model="formData.working_days"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
@@ -125,13 +125,13 @@ const saveProfile = () => {
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    coo
+                    Other Commissions
                   </label>
                   <input
                     type="number"
                     value="0"
                     required
-                    v-model="formData.coo"
+                    v-model="formData.other_commissions"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
@@ -139,13 +139,13 @@ const saveProfile = () => {
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    cto
+                    loan or penality
                   </label>
                   <input
                     type="number"
                     value="0"
                     required
-                    v-model="formData.cto"
+                    v-model="formData.loan_or_penality"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
