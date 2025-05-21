@@ -23,7 +23,7 @@ const menuItems = [
 ];
 
 const fallbackImage =
-  "https://res.cloudinary.com/dqxy77qks/image/upload/v1747340223/4b42ed27-d4d8-4205-b44b-595b7060097d.png";
+  "https://res.cloudinary.com/dqxy77qks/image/upload/v1747871524/801437dc-3f1b-480a-b043-1491ff1a7925.png";
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
