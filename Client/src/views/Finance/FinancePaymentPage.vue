@@ -1,9 +1,28 @@
 <script setup>
 import Modal from "@/components/UI/Modal.vue";
 import FinanceLayout from "@/layout/FinanceLayout.vue";
-import { ref } from "vue";
+import { useEmployeeStore } from "@/stores/employee";
+import { onMounted, ref } from "vue";
 
-const isProfileAddressModal = ref(false);
+const isAddPaymentModal = ref(false);
+const { getEmployees } = useEmployeeStore();
+
+onMounted(async () => {
+  getEmployees;
+});
+
+const formData = ref({
+  allowances_name: "",
+  ceo: null,
+  coo: null,
+  cto: null,
+  ciso: null,
+  director: null,
+  dept_lead: null,
+  normal_employee: null,
+  positioned: null,
+  non_positioned: null,
+});
 
 const saveProfile = () => {
   // Implement save profile logic here
@@ -18,21 +37,21 @@ const saveProfile = () => {
 
     <div class="px-4 w-full flex flex-col">
       <button
-        @click="isProfileAddressModal = true"
+        @click="isAddPaymentModal = true"
         class="bg-white px-4 py-3 text-sm text-gray-700 ring-1 ring-inset ring-gray-300 ark:bg-gray-800 ark:text-gray-400 ark:ring-gray-700 ark:hover:bg-white/[0.03] ark:hover:text-gray-300 inline-flex items-center justify-center font-medium gap-2 rounded-lg transition w-fit ml-auto mr-6 hover:bg-[#f3a21b] hover:text-white"
       >
         New Payment
       </button>
     </div>
 
-    <Modal v-if="isProfileAddressModal" @close="isProfileAddressModal = false">
+    <Modal v-if="isAddPaymentModal" @close="isAddPaymentModal = false">
       <template #body>
         <div
           class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 ark:bg-gray-900 lg:p-11"
         >
           <!-- close btn -->
           <button
-            @click="isProfileAddressModal = false"
+            @click="isAddPaymentModal = false"
             class="transition-color absolute right-5 top-5 z-999 flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 ark:bg-white/[0.05] ark:text-gray-400 ark:hover:bg-white/[0.07] ark:hover:text-gray-300"
           >
             <svg
@@ -61,74 +80,89 @@ const saveProfile = () => {
               Update your details to keep your profile up-to-date.
             </p>
           </div>
-          <form class="flex flex-col">
+          <form class="flex flex-col mt-8">
             <div class="px-2 overflow-y-auto custom-scrollbar">
-              <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+              <div class="my-4">
+                <label
+                  class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                >
+                  Allowance Type
+                </label>
+
+                <select
+                  v-model="selectedAllowance"
+                  class="w-full border rounded px-3 py-2 capitalize"
+                >
+                  <option
+                    v-for="(allowance, index) in allowances"
+                    :key="index"
+                    :value="allowance"
+                    class="capitalize"
+                  >
+                    {{ allowance.allowances_name }}
+                  </option>
+                </select>
+              </div>
+
+              <div
+                class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2 transition-all ease-linear duration-300"
+              >
                 <div>
                   <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    Country
+                    Ceo
                   </label>
                   <input
-                    type="text"
-                    value="United States"
-                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.ceo"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-
                 <div>
                   <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    City/State
+                    coo
                   </label>
                   <input
-                    type="text"
-                    value="Poenix, Arizona, United States"
-                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.coo"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-
                 <div>
                   <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
-                    Postal Code
+                    cto
                   </label>
                   <input
-                    type="text"
-                    value="ERT 2489"
-                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    class="mb-1.5 block text-sm font-medium text-gray-700 ark:text-gray-400"
-                  >
-                    TAX ID
-                  </label>
-                  <input
-                    type="text"
-                    value="AS4568384"
-                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.cto"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
               </div>
             </div>
             <div class="flex items-center gap-3 mt-6 lg:justify-end">
               <button
-                @click="isProfileAddressModal = false"
+                @click="isAddAllowanceModal = false"
                 type="button"
-                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 ark:border-gray-700 ark:bg-gray-800 ark:text-gray-400 ark:hover:bg-white/[0.03] sm:w-auto"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ark:border-gray-700 ark:bg-gray-800 ark:text-gray-400 ark:hover:bg-white/[0.03] sm:w-auto"
               >
                 Close
               </button>
               <button
                 @click="saveProfile"
                 type="button"
-                class="flex w-full justify-center rounded-lg bg-[#2D479B] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#f3a21b] sm:w-auto"
+                class="flex w-full justify-center rounded-lg bg-[#2D479B] px-4 py-2 text-sm font-medium text-white hover:bg-[#f3a21b] sm:w-auto"
               >
                 Save Changes
               </button>
