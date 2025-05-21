@@ -20,7 +20,7 @@ defineProps<BreadcrumbProps>();
         <li>
           <RouterLink
             class="ark:text-gray-400 inline-flex items-center gap-1.5 text-sm text-gray-500"
-            :to="{ name: 'Home' }"
+            :to="{ name: 'Welcome' }"
           >
             Home
             <svg
