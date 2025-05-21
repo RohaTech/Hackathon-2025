@@ -457,7 +457,7 @@ const openDetailPopup = (allowance) => {
                   ]"
                 >
                   {{ allowance.isPercent ? "True" : "False" }}</span
-                >``
+                >
               </td>
 
               <td class="px-5 py-4 sm:px-6">
