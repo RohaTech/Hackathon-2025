@@ -159,7 +159,185 @@ watchEffect(() => {
             </h4>
           </div>
 
-          3
+          <form class="flex flex-col mt-8">
+            <div class="px-2 overflow-y-auto custom-scrollbar">
+              <div class="my-4">
+                <label
+                  class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                >
+                  Allowance Type
+                </label>
+
+                <select
+                  v-model="selectedAllowance"
+                  class="w-full border rounded px-3 py-2 capitalize"
+                >
+                  <option
+                    v-for="(allowance, index) in allowances"
+                    :key="index"
+                    :value="allowance"
+                    class="capitalize"
+                  >
+                    {{ allowance.allowances_name }}
+                  </option>
+                </select>
+              </div>
+
+              <div
+                v-if="withPosition"
+                class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2 transition-all ease-linear duration-300"
+              >
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    Ceo
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.ceo"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    coo
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.coo"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    cto
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.cto"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    ciso
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.ciso"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    director
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.director"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    department lead
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.dept_lead"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    normal_employee
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.normal_employee"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+              </div>
+              <div
+                v-if="!withPosition"
+                class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2 transition-all ease-linear duration-700"
+              >
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    positioned
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.positioned"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    non positioned
+                  </label>
+                  <input
+                    type="number"
+                    value="0"
+                    required
+                    v-model="formData.non_positioned"
+                    class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 mt-6 lg:justify-end">
+              <button
+                @click="isAddAllowanceModal = false"
+                type="button"
+                class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ark:border-gray-700 ark:bg-gray-800 ark:text-gray-400 ark:hover:bg-white/[0.03] sm:w-auto"
+              >
+                Close
+              </button>
+              <button
+                @click="saveProfile"
+                type="button"
+                class="flex w-full justify-center rounded-lg bg-[#2D479B] px-4 py-2 text-sm font-medium text-white hover:bg-[#f3a21b] sm:w-auto"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
       </template>
     </Modal>

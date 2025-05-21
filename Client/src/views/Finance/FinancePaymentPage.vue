@@ -2,10 +2,12 @@
 import Modal from "@/components/UI/Modal.vue";
 import FinanceLayout from "@/layout/FinanceLayout.vue";
 import { useEmployeeStore } from "@/stores/employee";
+import { usePayrollStore } from "@/stores/payrollStore";
 import { onMounted, ref } from "vue";
 
 const isAddPaymentModal = ref(false);
 const { getEmployees } = useEmployeeStore();
+const { createPayroll } = usePayrollStore();
 
 const employees = ref([]);
 
@@ -21,8 +23,9 @@ const formData = ref({
   loan_or_penality: "",
 });
 
-const saveProfile = () => {
+const saveProfile = async () => {
   console.log(formData.value);
+  await createPayroll(formData.value);
   console.log("Profile saved");
   isProfileInfoModal.value = false;
 };
