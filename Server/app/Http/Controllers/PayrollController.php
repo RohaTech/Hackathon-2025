@@ -29,22 +29,25 @@ class PayrollController extends Controller
     public function store(Request $request)
     {
         $employee = Employee::find($request->employee_id);
-        
-        $earned_salary = $request->working_days * ($employee->basic_salary/30);
-        
+
+        $earned_salary = $request->working_days * ($employee->basic_salary / 30);
+
         $allowances = Allowance::all();
-        dd($allowances);
+
         $allowanceCollection = [];
-        foreach($allowances as $allowance){
-            
-            
-            
-            if($employee->position == "ceo" && $allowance->ceo != NULL){
+        foreach ($allowances as $allowance) {
+
+
+
+            if ($employee->position == "ceo" && $allowance->ceo != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                dd($allowanceValue, $allowance);
-                // $allowances = $allowances->where('ceo', '!=', 0)->sum('ceo');
+                $netAllowance = $allowanceValue->ceo - $allowance->ceo;
+                $allowanceCollection = [
+                    "allowances_name" => $allowance->allowances_name,
+                    "taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                    "non_taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                ];
             }
-            
         }
         $other_commissions = $request->other_commissions;
         // if($employee->position == "ceo"){
@@ -104,7 +107,8 @@ class PayrollController extends Controller
         return response()->json([
             'status' => 'success',
             'payroll' => $payroll,
-        ]);}
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.
