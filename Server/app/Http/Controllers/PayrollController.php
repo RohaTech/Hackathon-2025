@@ -138,59 +138,96 @@ class PayrollController extends Controller
                 ];
             }
         }
-        return response()->json([
-            'status' => 'success',
-            'allowances' => $allowanceCollection,
-        ]);
-        
-        $other_commissions = $request->other_commissions;
-        // if($employee->position == "ceo"){
-        //     $allowanceValue = AllowanceValue::where('allowances_name', 'ceo')->first();
-        //     $allowances = $allowances->where('ceo', '!=', 0)->sum('ceo');
-        // }else if($employee->position == "cto"){ 
-        //     $allowances = $allowances->where('cto', '!=', 0)->sum('cto');
-        // }else if($employee->position == "coo"){
-        //     $allowances = $allowances->where('coo', '!=', 0)->sum('coo');
-        // }else if($employee->position == "ciso"){
-        //     $allowances = $allowances->where('ciso', '!=', 0)->sum('ciso');
-        // }else if($employee->position == "director"){
-        //     $allowances = $allowances->where('director', '!=', 0)->sum('director');
-        // }else if($employee->position == "dept_lead"){
-        //     $allowances = $allowances->where('dept_lead', '!=', 0)->sum('dept_lead');
-        // }else if($employee->position == "normal_employee"){
-        //     $allowances = $allowances->where('normal_employee', '!=', 0)->sum('normal_employee');
-        // }else if($employee->position == "positioned"){
-        //     $allowances = $allowances->where('positioned', '!=', 0)->sum('positioned');
-        // }else if($employee->position == "non_positioned"){
-        //     $allowances = $allowances->where('non_positioned', '!=', 0)->sum('non_positioned');
-        // }else{
-        //     $allowances = 0;
-        // }
-        // $gross_pay = $earned_salary + $allowances + $other_commissions;
-        // $taxable_income = $gross_pay - ($employee->account->balance ?? 0);
-
-        // $validated = $request->validate([
-        //     'employee_id' => 'required|exists:employees,id',
-        //     'working_days' => 'required|integer',
-        //     'earned_salary' => 'required|numeric',
-        //     'allowances' => 'required|numeric',
-        //     'other_commissions' => 'required|numeric',
-        //     'gross_pay' => 'required|numeric',
-        //     'taxable_income' => 'required|numeric',
-        //     'income_tax' => 'required|numeric',
-        //     'employee_pension' => 'required|numeric',
-        //     'employer_pension' => 'required|numeric',
-        //     'loan_or_penality' => 'required|numeric',
-        //     'total_deductions' => 'required|numeric',
-        //     'net_pay' => 'required|numeric',
-        // ]);
-
-        // $payroll = Payroll::create($validated);
-
         // return response()->json([
         //     'status' => 'success',
-        //     'payroll' => $payroll,
-        // ], 201);
+        //     'allowances' => $allowanceCollection,
+        // ]);
+        
+        $taxable_income = 0;
+        $non_taxable_income = 0;
+        $other_commissions = $request->other_commissions;
+        foreach ($allowanceCollection as $allowance) {
+            if ($allowance['taxable'] > 0 && $allowance['non_taxable'] > 0) {
+                $taxable_income += $allowance['taxable'];
+                $non_taxable_income += $allowance['non_taxable'];
+            } 
+            else if ($allowance['taxable'] > 0) {
+                $taxable_income += $allowance['taxable'];
+            }
+            else if ($allowance['non_taxable'] > 0) {
+                $non_taxable_income += $allowance['non_taxable'];
+            }else{
+                $non_taxable_income += 0;
+            }
+        }
+
+        // $taxable_allowances_sum = $allowanceCollection->sum('taxable');
+
+        // $non_taxable_income = $allowanceCollection->sum('non_taxable');
+        // dd($taxable_income , $non_taxable_income);
+
+        // dd($earned_salary);
+        $other_commissions = $request->other_commissions;
+        $gross_pay = $earned_salary + $taxable_income + $non_taxable_income + $other_commissions;
+        // dd($gross_pay);
+
+        $taxable_income = $gross_pay - $non_taxable_income;
+        // dd($taxable_income);
+
+        if($employee->basic_salary >0 && $employee->basic_salary <= 600){
+            $income_tax = 0;
+        }else if($employee->basic_salary > 600 && $employee->basic_salary <= 1650){
+            $income_tax = $taxable_income * 0.1;
+        }else if($employee->basic_salary > 1650 && $employee->basic_salary <= 3200){
+            $income_tax = $taxable_income * 0.15;
+        }else if($employee->basic_salary > 3200 && $employee->basic_salary <= 5250){
+            $income_tax = $taxable_income * 0.2;
+        }else if($employee->basic_salary > 5250 && $employee->basic_salary <= 7800){
+            $income_tax = $taxable_income * 0.25;
+        }else if($employee->basic_salary > 7800 && $employee->basic_salary <= 10900){
+            $income_tax = $taxable_income * 0.3;
+        }else if($employee->basic_salary > 10900){
+            $income_tax = $taxable_income * 0.35;
+        }
+
+
+        if($employee->employement_type == "full_time"){
+            $employee_pension = $employee->basic_salary * 0.07;
+        }else if($employee->employement_type == "part_time"){
+            $employee_pension = 0;
+        }else{
+            $employee_pension = 0;
+            $employer_pension = 0;
+        }
+
+        $employer_pension = $employee->basic_salary * 0.11;
+        $loan_or_penality = $request->loan_or_penality;
+        $total_deductions = $income_tax + $employee_pension + $loan_or_penality;
+        $net_pay = $gross_pay - $total_deductions;
+
+        return response()->json([
+            'status' => 'success',
+            'payroll' => [
+                'employee_id' => $employee->id,
+                'employee_name' => $employee->name,
+                'employee_email' => $employee->email,
+                'employee_position' => $employee->position,
+                'working_days' => $request->working_days,
+                'earned_salary' => $earned_salary,
+                'allowances' => $allowanceCollection,
+                'other_commissions' => $other_commissions,
+                'gross_pay' => $gross_pay,
+                'taxable_income' => $taxable_income,
+                'income_tax' => $income_tax,
+                'employee_pension' => $employee_pension,
+                'employer_pension' => $employer_pension,
+                'loan_or_penality' => $loan_or_penality,
+                'total_deductions' => $total_deductions,
+                'net_pay' => $net_pay,
+            ],
+        ]);
+
+
     }
 
     /**
