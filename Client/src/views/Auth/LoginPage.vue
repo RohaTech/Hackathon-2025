@@ -181,12 +181,8 @@ const handleSubmit = () => {
             <common-grid-shape />
             <div class="flex max-w-xs flex-col items-center">
               <RouterLink :to="{ name: 'Welcome' }" class="mb-4 block">
-                <Logo class="w-[50px] fill-white" />
+                <Logo class="w-[300px] fill-white" />
               </RouterLink>
-              <p class="ark:text-white/60 text-center text-white">
-                calculate and generate payroll
-              </p>
-              <p class="ark:text-white/60 text-center text-white">at ease</p>
             </div>
           </div>
         </div>
