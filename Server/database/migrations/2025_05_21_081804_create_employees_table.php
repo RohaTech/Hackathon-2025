@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('position', ['ceo', 'coo', 'cto', 'ciso', 'director', 'dept_lead', 'normal_employee']);
             $table->string('employement_date');
             $table->decimal('basic_salary', 10, 2);
-            $table->foreignId('bank_account_id')->constrained('accounts');
+            $table->foreignId('bank_account_id')->constrained('accounts')->cascadeOnDelete();;
             $table->timestamps();
         });
     }

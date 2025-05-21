@@ -6,7 +6,7 @@ import Modal from "@/components/UI/Modal.vue";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
-const { getEmployees, addEmployee, updateEmployee } = useEmployeeStore();
+const { getEmployees, addEmployee, updateEmployee, deleteEmployee } = useEmployeeStore();
 const employees = ref([]);
 
 onMounted(async () => {
@@ -22,6 +22,12 @@ const openDetailPopup = (employee) => {
   console.log(selectedEmployee.value);
   showPopup.value = true;
   console.log(showPopup.value);
+};
+
+const handleDeleteEmployee = async () => {
+  await deleteEmployee(selectedEmployee.value.id);
+  employees.value = await getEmployees();
+  closePopup();
 };
 
 const closePopup = () => {
@@ -308,6 +314,7 @@ const saveEditEmployee = async () => {
               <template v-else>
                 <button @click="cancelEditEmployee" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto">Cancel</button>
                 <button @click="saveEditEmployee" class="flex w-full justify-center rounded-lg border border-[#0a5098] bg-[#121fb5] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#0a1698] sm:w-auto">Save</button>
+                <button @click="handleDeleteEmployee" class="flex w-full justify-center rounded-lg border border-[#7b2c0f] bg-[#de2904] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#d07373] sm:w-auto">Delete</button>
               </template>
             </div>
           </div>
