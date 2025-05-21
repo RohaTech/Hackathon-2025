@@ -347,7 +347,7 @@ const openDetailPopup = (allowance) => {
       class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
     >
       <div class="max-w-full overflow-x-auto custom-scrollbar">
-        <table v-if="allowancesValue.length > 0" class="min-w-full">
+        <table class="min-w-full">
           <thead>
             <tr class="border-b border-gray-200 dark:border-gray-700">
               <th class="px-5 py-3 text-left w-3/11 sm:px-6">
@@ -395,7 +395,35 @@ const openDetailPopup = (allowance) => {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-if="allowancesValue.length === 0">
+              <td colspan="7" class="px-5 py-8 text-center sm:px-6">
+                <div class="flex flex-col items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-12 w-12 text-gray-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p class="mt-2 text-base text-gray-500">
+                    No Allowance found
+                    <span class="font-medium capitalize">{{
+                      selectedStatus
+                    }}</span>
+                  </p>
+                </div>
+              </td>
+            </tr>
+
             <tr
+              v-else
               v-for="(allowance, index) in allowancesValue"
               :key="index"
               class="border-t border-gray-100 dark:border-gray-800"

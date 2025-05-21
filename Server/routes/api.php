@@ -21,7 +21,7 @@ Route::apiResource('/employees', EmployeeController::class);
 Route::apiResource('/accounts', AccountController::class);
 Route::apiResource('/payrollvariable', PayrollVariableController::class);
 Route::apiResource('/allowances', AllowanceController::class);
-Route::apiResource('/allowancesValue', AllowanceValueController::class);
+Route::apiResource('/allowancesvalue', AllowanceValueController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
