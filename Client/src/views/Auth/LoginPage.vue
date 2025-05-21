@@ -180,7 +180,7 @@ const handleSubmit = () => {
           <div class="z-1 flex items-center justify-center">
             <common-grid-shape />
             <div class="flex max-w-xs flex-col items-center">
-              <RouterLink :to="{ name: 'Home' }" class="mb-4 block">
+              <RouterLink :to="{ name: 'Welcome' }" class="mb-4 block">
                 <Logo class="w-[50px] fill-white" />
               </RouterLink>
               <p class="ark:text-white/60 text-center text-white">

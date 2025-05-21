@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import FinanceSearchBar from "./FinanceSearchBar.vue";
-import FinanceNotificationMenu from "./FinanceNotificationMenu.vue";
-import FinanceUserMenu from "./FinanceUserMenu.vue";
+import HeadFinanceSearchBarFinanceSearchBar from "./HeadFinanceSearchBar.vue";
+import HeadFinanceUserMenu from "./HeadFinanceNotificationMenu.vue";
+import HeadFinanceUserMenu from "./HeadFinanceUserMenu.vue";
 import Logo from "../UI/Logo.vue";
 import { useSidebar } from "@/composables/useSidebar";
 
@@ -97,6 +97,7 @@ const toggleApplicationMenu = () => {
             />
           </svg>
         </button>
+        <HeadFinanceSearchBarFinanceSearchBar />
       </div>
 
       <div
@@ -105,9 +106,9 @@ const toggleApplicationMenu = () => {
       >
         <div class="2xsm:gap-3 flex items-center gap-2">
           <div class=""></div>
-          <FinanceNotificationMenu />
+          <HeadFinanceUserMenu />
         </div>
-        <FinanceUserMenu />
+        <HeadFinanceUserMenu />
       </div>
     </div>
   </header>
