@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AllowanceController;
+use App\Http\Controllers\AllowanceValueController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
 
@@ -20,10 +21,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::apiResource('/employees', EmployeeController::class)->middleware('auth:sanctum');
-Route::apiResource('/accounts', AccountController::class)->middleware('auth:sanctum');
+Route::apiResource('/employees', EmployeeController::class);
+Route::apiResource('/accounts', AccountController::class);
 Route::apiResource('/payrollvariable', PayrollVariableController::class);
 Route::apiResource('/allowances', AllowanceController::class);
+Route::apiResource('/allowancesValue', AllowanceValueController::class);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
