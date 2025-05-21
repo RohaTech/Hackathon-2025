@@ -7,12 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.1",
         "chapa/chapa-laravel": "dev-main",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
-        "negusnati/chapa-laravel-11x": "dev-main"
+        "negusnati/chapa-laravel-11x": "dev-main",
+        "spatie/laravel-pdf": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
