@@ -55,5 +55,28 @@ export const useEmployeeStore = defineStore("employeeStore", {
       }
     },
 
+    async updateEmployee(employee_id, employeeData) {
+      try {
+        const response = await fetch(`/api/employees/${employee_id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(employeeData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.employees = data;
+        return this.employees;
+      } catch (error) {
+        console.error("Error fetching active employees:", error);
+        return [];
+      }
+    },
   },
 });
