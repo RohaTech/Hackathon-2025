@@ -6,6 +6,9 @@ import FinanceEmployeePage from '@/views/Finance/FinanceEmployeePage.vue'
 import FinancePaymentPage from '@/views/Finance/FinancePaymentPage.vue'
 import LoginPage from '@/views/Auth/LoginPage.vue'
 import { useAuthStore } from '@/stores/auth'
+import HeadFinanceHomeView from '@/views/Head Finance/HeadFinanceHomeView.vue'
+import HeadFinancePayrollHistory from '@/views/Head Finance/HeadFinancePayrollHistory.vue'
+import HeadFinanceDashboard from '@/views/Head Finance/HeadFinanceDashboard.vue'
 
 
 
@@ -40,6 +43,27 @@ const router = createRouter({
 
     },
     {
+      path: '/head-finance',
+      name: 'HeadFinanceHome',
+      component: HeadFinanceHomeView,
+      meta: { head_finance: true },
+
+    },
+    {
+      path: '/head-finance/open-request',
+      name: 'HeadFinancePayrollHistory',
+      component: HeadFinancePayrollHistory,
+      meta: { head_finance: true },
+
+    },
+    {
+      path: '/head-finance/dashboard',
+      name: 'HeadFinanceDashboard',
+      component: HeadFinanceDashboard,
+      meta: { head_finance: true },
+
+    },
+    {
       path: '/login',
       name: 'Login',
       component: LoginPage,
@@ -56,16 +80,35 @@ router.beforeEach(async (to, from) => {
   await authStore.getUser();
   // console.log(authStore.user);
 
+  if (authStore.user?.role === "head_finance" && to.meta.welcome) {
+    return { name: "HeadFinanceHome" };
+  }
+  if (authStore.user?.role === "head_finance" && to.meta.guest) {
+    return { name: "HeadFinanceHome" };
+  }
+  if (authStore.user?.role === "head_finance" && to.meta.finance) {
+    return { name: "HeadFinanceHome" };
+  }
+
+
   if (authStore.user?.role === "finance" && to.meta.welcome) {
     return { name: "FinanceHome" };
   }
   if (authStore.user?.role === "finance" && to.meta.guest) {
     return { name: "FinanceHome" };
   }
+  if (authStore.user?.role === "finance" && to.meta.head_finance) {
+    return { name: "FinanceHome" };
+  }
+
+
   if (authStore.user && to.meta.welcome) {
     return { name: "FinanceHome" };
   }
-  if (!authStore.user && to.meta.FinanceHome) {
+  if (!authStore.user && to.meta.finance) {
+    return { name: "Welcome" };
+  }
+  if (!authStore.user && to.meta.head_finance) {
     return { name: "Welcome" };
   }
 

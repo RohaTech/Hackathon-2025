@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payrolls', function (Blueprint $table) {
+        Schema::create('payroll_variables', function (Blueprint $table) {
             $table->id();
+            $table->string('position');
+            $table->decimal('transport_allowance')->default("0");
+            $table->decimal('position_allowance')->default("0");
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payrolls');
+        Schema::dropIfExists('payroll_variables');
     }
 };
