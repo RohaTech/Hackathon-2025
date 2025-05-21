@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('normal_employee')->nullable();
             $table->decimal('positioned')->nullable();
             $table->decimal('non_positioned')->nullable();
+            $table->boolean('isPercent')->default(false);
             $table->timestamps();
         });
     }
