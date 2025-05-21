@@ -10,7 +10,7 @@ defineEmits(["close"]);
 </script>
 <template>
   <div
-    class="fixed inset-0 z-99999 flex items-center justify-center overflow-y-auto overflow-x-hidden"
+    class="fixed inset-0 z-99999 flex items-center bg-black/50 justify-center overflow-y-auto overflow-x-hidden"
   >
     <div
       v-if="fullScreenBackdrop"
