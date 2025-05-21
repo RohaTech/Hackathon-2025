@@ -11,12 +11,12 @@ class EmployeeController extends Controller
     public function index()
     {
         
-        $employees = Employee::all();
+        $employees = Employee::with('account')->get();
         return response()->json($employees);
     }
     public function show($id)
     {
-        $employee = Employee::find($id);
+        $employee = Employee::with('account')->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
         }
@@ -59,4 +59,49 @@ class EmployeeController extends Controller
                 ], 201);
         });
     }  
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'gender' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|max:255|unique:employees,email,' . $id,
+            'employement_type' => 'sometimes|required|string|max:255|in:full_time,part_time',
+            'position' => 'sometimes|required|string|max:255|in:ceo,coo,cto,ciso,director,dept_lead,normal_employee',
+            'employement_date' => 'sometimes|required|date',
+            'basic_salary' => 'sometimes|required|numeric',
+            'account_number' => 'sometimes|required|string|max:255',
+            'balance' => 'sometimes|required|numeric',
+        ]);
+        // dd($request->all());
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+        $account = Account::find($employee->bank_account_id);
+        if (!$account) {
+            return response()->json(['message' => 'Account not found'], 404);
+        }
+        $employee->update($validatedData);
+        $account->update([
+            'account_number' => $validatedData['account_number'] ?? $account->account_number,
+            'balance' => $validatedData['balance'] ?? $account->balance,
+        ]);
+        return response()->json([
+            'account' => $account,
+            'employee' => $employee,
+        ]);
+    }
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+        $account = Account::find($employee->bank_account_id);
+        if ($account) {
+            $account->delete();
+        }
+        $employee->delete();
+        return response()->json(['message' => 'Employee deleted successfully']);
+    }
 }

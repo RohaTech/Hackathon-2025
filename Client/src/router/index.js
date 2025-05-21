@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth'
 import HeadFinanceHomeView from '@/views/Head Finance/HeadFinanceHomeView.vue'
 import HeadFinancePayrollHistory from '@/views/Head Finance/HeadFinancePayrollHistory.vue'
 import HeadFinanceDashboard from '@/views/Head Finance/HeadFinanceDashboard.vue'
+import HeadFinanceAllowance from '@/views/Head Finance/HeadFinanceAllowance.vue'
 
 
 
@@ -60,6 +61,13 @@ const router = createRouter({
       path: '/head-finance/dashboard',
       name: 'HeadFinanceDashboard',
       component: HeadFinanceDashboard,
+      meta: { head_finance: true },
+
+    },
+    {
+      path: '/head-finance/allowance',
+      name: 'HeadFinanceAllowance',
+      component: HeadFinanceAllowance,
       meta: { head_finance: true },
 
     },

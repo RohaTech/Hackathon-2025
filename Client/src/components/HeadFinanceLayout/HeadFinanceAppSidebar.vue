@@ -45,6 +45,12 @@ const menuGroups = [
         // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
         path: "HeadFinanceDashboard",
       },
+      {
+        icon: TableIcon,
+        name: "Allowance",
+        // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+        path: "HeadFinanceAllowance",
+      },
     ],
   },
 ];
