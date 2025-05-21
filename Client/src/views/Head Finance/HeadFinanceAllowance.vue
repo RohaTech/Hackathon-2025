@@ -86,7 +86,7 @@ const openDetailPopup = (allowance) => {
 
 <template>
   <HeadFinanceLayout>
-    <h1 class="font-bold text-xl">Payroll</h1>
+    <h1 class="font-bold text-xl">Allowance Deduction Rules</h1>
 
     <div class="px-4 w-full flex flex-col">
       <button
