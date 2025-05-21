@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
 
 use App\Http\Controllers\InvoiceController;
-
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PayrollVariableController;
 
 use App\Models\Account;
@@ -22,7 +22,7 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('/employees', EmployeeController::class);
 Route::apiResource('/accounts', AccountController::class);
-Route::apiResource('/payrolls', Payroll::class);
+Route::apiResource('/payrolls', PayrollController::class);
 Route::apiResource('/allowances', AllowanceController::class);
 Route::apiResource('/allowancesvalue', AllowanceValueController::class);
 
