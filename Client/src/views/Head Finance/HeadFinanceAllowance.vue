@@ -21,6 +21,7 @@ const formData = ref({
   normal_employee: null,
   positioned: null,
   non_positioned: null,
+  isPercent: false,
 });
 const updatedAllowanceData = ref({
   allowances_name: "",
@@ -33,6 +34,7 @@ const updatedAllowanceData = ref({
   normal_employee: null,
   positioned: null,
   non_positioned: null,
+  isPercent: false,
 });
 
 const withPosition = ref(true);
@@ -63,6 +65,7 @@ const HandleDeleteAllowance = async () => {
   console.log("Allowance Deleted");
   isAllowanceDetail.value = false;
 };
+
 const handleToggle = () => {
   withPosition.value = !withPosition.value;
   formData.value.ceo = null;
@@ -74,8 +77,11 @@ const handleToggle = () => {
   formData.value.normal_employee = null;
   formData.value.non_positioned = null;
   formData.value.positioned = null;
+  formData.value.isPercent = false;
 };
-
+const handlePercentToggle = () => {
+  formData.value.isPercent = !formData.value.isPercent;
+};
 const openDetailPopup = (allowance) => {
   selectedAllowance.value = allowance;
   isAllowanceDetail.value = true;
@@ -155,24 +161,39 @@ const openDetailPopup = (allowance) => {
           </div>
           <form class="flex flex-col mt-8">
             <div class="px-2 overflow-y-auto custom-scrollbar">
-              <div class="my-4">
-                <label for="name" class="mb-1 block text-sm text-[#0F172A]">
-                  Allowance Name <span class="text-red-500">*</span>
-                </label>
-                <input
-                  id="name"
-                  v-model="formData.allowances_name"
-                  type="text"
-                  class="ark:bg-dark-900 focus:outline-hidden ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
-                  placeholder="Enter Allowance Name"
-                  required
-                />
-                <!-- <p
+              <div
+                class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2 transition-all ease-linear duration-300"
+              >
+                <div class="my-4">
+                  <label for="name" class="mb-1 block text-sm text-[#0F172A]">
+                    Allowance Name <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="name"
+                    v-model="formData.allowances_name"
+                    type="text"
+                    class="ark:bg-dark-900 focus:outline-hidden ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
+                    placeholder="Enter Allowance Name"
+                    required
+                  />
+                  <!-- <p
                   v-if="errors?.name"
                   class="mt-2 text-xs font-semibold text-red-500"
                 >
                   {{ errors.name }}
                 </p> -->
+                </div>
+
+                <div
+                  class="flex gap-x-2 items-center cursor-pointer"
+                  @click="handlePercentToggle"
+                >
+                  <div
+                    class="rounded-full size-6 border-2 border-black"
+                    :class="{ 'bg-[#0a5098] border-none': formData.isPercent }"
+                  ></div>
+                  <span class="text-sm">Is The Values Percent</span>
+                </div>
               </div>
 
               <div
@@ -374,7 +395,7 @@ const openDetailPopup = (allowance) => {
                 <p
                   class="font-medium capitalize text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Non Positioned Employee
+                  Is Percent
                 </p>
               </th>
               <th class="px-5 py-3 text-left w-2/11 sm:px-6">
@@ -422,15 +443,23 @@ const openDetailPopup = (allowance) => {
                   }}
                 </p>
               </td>
+
               <td class="px-5 py-4 sm:px-6">
-                <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                  {{
-                    allowance.non_positioned !== null
-                      ? allowance.non_positioned
-                      : "Not Specified"
-                  }}
-                </p>
+                <span
+                  :class="[
+                    'rounded-full px-2 py-0.5 text-theme-xs font-medium',
+                    {
+                      'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500':
+                        allowance.isPercent,
+                      'bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500':
+                        !allowance.isPercent,
+                    },
+                  ]"
+                >
+                  {{ allowance.isPercent ? "True" : "False" }}</span
+                >``
               </td>
+
               <td class="px-5 py-4 sm:px-6">
                 <p
                   @click="openDetailPopup(allowance)"
