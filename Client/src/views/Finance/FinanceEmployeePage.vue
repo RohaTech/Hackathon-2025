@@ -3,7 +3,8 @@ import FinanceLayout from "@/layout/FinanceLayout.vue";
 import { useEmployeeStore } from "@/stores/employee";
 import { onMounted, ref, computed } from "vue";
 import Modal from "@/components/UI/Modal.vue";
-
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
 
 const { getEmployees, addEmployee } = useEmployeeStore();
 const employees = ref([]);
@@ -38,17 +39,58 @@ const rename = (value) => {
   }
 };
 
+const showAddEmployeeModal = ref(false);
+const newEmployee = ref({
+  name: '',
+  gender: '',
+  email: '',
+  employement_type: 'full_time',
+  position: '',
+  employement_date: '',
+  basic_salary: '',
+  account_number: '',
+  balance: 0,
+});
+
+const openAddEmployeeModal = () => {
+  showAddEmployeeModal.value = true;
+};
+const closeAddEmployeeModal = () => {
+  showAddEmployeeModal.value = false;
+  // Reset form fields
+  newEmployee.value = {
+    name: '',
+    email: '',
+    gender: '',
+    employement_type: 'full_time',
+    position: '',
+    employement_date: '',
+    basic_salary: '',
+    account_number: '',
+    balance: 0,
+  };
+};
+
+const submitAddEmployee = async () => {
+  await addEmployee({
+    ...newEmployee.value,
+    // account: { account_number: newEmployee.value.account_number },
+  });
+  employees.value = await getEmployees();
+  closeAddEmployeeModal();
+};
+
 
 </script>
 
 <template>
   <FinanceLayout>
-      <button
-                  @click="changeStatus('all')"
-                  class="my-4 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  Add Employee
-                </button>
+    <button
+      @click="openAddEmployeeModal"
+      class="my-4 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+    >
+      Add Employee
+    </button>
     <div class="custom-scrollbar max-w-full overflow-x-auto">
       <table class="min-w-full border-t-2">
         <thead>
@@ -338,5 +380,90 @@ const rename = (value) => {
         </div>
       </template>
     </Modal>
+
+    <Modal v-if="showAddEmployeeModal" @close="closeAddEmployeeModal" :fullScreenBackdrop="true">
+      <template #body>
+        <div class="relative max-h-[700px] w-full max-w-[700px] overflow-y-auto overflow-x-hidden rounded-3xl bg-white p-4 lg:p-11">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Add Employee</h2>
+            <button @click="closeAddEmployeeModal" class="text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+          </div>
+          <form @submit.prevent="submitAddEmployee">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block mb-1 font-medium">Name</label>
+                <input v-model="newEmployee.name" type="text" required class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block mb-1 font-medium">Email</label>
+                <input v-model="newEmployee.email" type="email" required class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block mb-1 font-medium">Employment Type</label>
+                <select v-model="newEmployee.employement_type" class="w-full border rounded px-3 py-2">
+                  <option value="full_time">Full Time</option>
+                  <option value="part_time">Part Time</option>
+                </select>
+              </div>
+              <div>
+                <label class="block mb-1 font-medium">Employment Type</label>
+                <select v-model="newEmployee.position" class="w-full border rounded px-3 py-2">
+                  <option value="ceo">CEO</option>
+                  <option value="coo">COO</option>
+                  <option value="cto">CTO</option>
+                  <option value="ciso">CISO</option>
+                  <option value="director">Director</option>
+                  <option value="dept_lead">Department Leader</option>
+                  <option value="normal_employee">Normal Employee</option>
+                </select>
+              </div>
+              <!-- <div>
+                <label class="block mb-1 font-medium">Position</label>
+                <input v-model="newEmployee.position" type="text" required class="w-full border rounded px-3 py-2" />
+              </div> -->
+              <div>
+                <label
+                  for="birth_date"
+                  class="mb-1 block text-sm text-[#0F172A]"
+                >
+                 Employment Date<span class="text-red-500">*</span>
+                </label>
+                <flat-pickr
+                  v-model="newEmployee.employement_date"
+                  :config="flatpickrConfig"
+                  class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
+                  placeholder="Select date"
+                  required
+                />
+              </div>
+              <!-- <div>
+                <label class="block mb-1 font-medium">Employment Date</label>
+                <input v-model="newEmployee.employement_date" type="date" required class="w-full border rounded px-3 py-2" />
+              </div> -->
+              <div>
+                <label class="block mb-1 font-medium">Basic Salary</label>
+                <input v-model="newEmployee.basic_salary" type="number" required class="w-full border rounded px-3 py-2" />
+              </div>
+              <div class="">
+                <label class="block mb-1 font-medium">Account Number</label>
+                <input v-model="newEmployee.account_number" type="text" required class="w-full border rounded px-3 py-2" />
+              </div>
+              <div>
+                <label class="block mb-1 font-medium">Gender</label>
+                <select v-model="newEmployee.gender" class="w-full border rounded px-3 py-2">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer mt-8 flex items-center gap-3 sm:justify-end">
+              <button type="button" @click="closeAddEmployeeModal" class="ark:border-gray-700 ark:bg-gray-800 ark:hover:bg-white/[0.03] flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 sm:w-auto">Close</button>
+              <button type="submit" class="flex w-full justify-center rounded-lg border border-[#0a5098] bg-[#121fb5] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#0a1698] sm:w-auto">Submit</button>
+            </div>
+          </form>
+        </div>
+      </template>
+    </Modal>
+
   </FinanceLayout>
 </template>
