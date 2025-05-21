@@ -6,6 +6,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,3 +20,5 @@ Route::apiResource('/accounts', AccountController::class)->middleware('auth:sanc
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/users/export', [UsersController::class, 'export']);
+
