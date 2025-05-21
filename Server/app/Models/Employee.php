@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 class Employee extends Model
 {
     use HasFactory, Notifiable,  HasApiTokens;
@@ -23,8 +25,8 @@ class Employee extends Model
         "bank_account_id"
     ];
 
-    public function account()
+    public function account() : HasOne
     {
-        return $this->hasOne(Account::class);
+        return $this->hasOne(Account::class,'id');
     }
 }
