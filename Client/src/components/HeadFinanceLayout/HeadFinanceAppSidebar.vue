@@ -30,20 +30,20 @@ const menuGroups = [
     title: "Menu",
     items: [
       {
-        icon: GridIcon,
-        name: "Dashboard",
-        // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-        path: "FinanceHome",
-      },
-      {
         icon: CalenderIcon,
-        name: "Employees",
-        path: "FinanceEmployee",
+        name: "Open Request",
+        path: "HeadFinanceHome",
       },
       {
         icon: ListIcon,
-        name: "Payment",
-        path: "FinancePayment",
+        name: "Payroll History",
+        path: "HeadFinancePayrollHistory",
+      },
+      {
+        icon: GridIcon,
+        name: "Dashboard",
+        // subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+        path: "HeadFinanceDashboard",
       },
     ],
   },
