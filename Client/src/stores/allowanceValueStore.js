@@ -12,7 +12,7 @@ export const useAllowanceValueStore = defineStore("allowanceValueStore", {
 
 
     async getAllowanceValue(allowanceValue) {
-      const res = await fetch(`/api/allowanceValues/${allowanceValue}`, {
+      const res = await fetch(`/api/allowancesvalue/${allowanceValue}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -26,7 +26,7 @@ export const useAllowanceValueStore = defineStore("allowanceValueStore", {
 
 
     async getAllAllowanceValues() {
-      const res = await fetch("/api/allowanceValues", {
+      const res = await fetch("/api/allowancesvalue", {
         method: "Get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,7 +46,7 @@ export const useAllowanceValueStore = defineStore("allowanceValueStore", {
     /*********************  Create Package ********************** */
     async createAllowanceValue(formData) {
 
-      const res = await fetch("/api/allowanceValues", {
+      const res = await fetch("/api/allowancesvalue", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +71,7 @@ export const useAllowanceValueStore = defineStore("allowanceValueStore", {
     /*********************  Update AllowanceValue ********************** */
     async updateAllowanceValue(formData, allowanceValue) {
 
-      const res = await fetch(`/api/allowanceValues/${allowanceValue}`, {
+      const res = await fetch(`/api/allowancesvalue/${allowanceValue}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -91,7 +91,7 @@ export const useAllowanceValueStore = defineStore("allowanceValueStore", {
 
     async deleteAllowanceValue(allowanceValue) {
       try {
-        const res = await fetch(`/api/allowanceValues/${allowanceValue}`, {
+        const res = await fetch(`/api/allowancesvalue/${allowanceValue}`, {
           method: 'delete',
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
