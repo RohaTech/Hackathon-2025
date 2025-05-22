@@ -136,7 +136,35 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->normal_employee : $allowanceValue->normal_employee - $netAllowance,
                 ];
+            }else if($employee->position == "normal_employee" && $allowance->non_positioned != NULL){
+                $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
+                if($allowance->isPercent){
+                    $netAllowance = $allowanceValue->non_positioned - ($allowance->non_positioned * $employee->basic_salary / 100);
+                }
+                else{
+                    $netAllowance = $allowanceValue->non_positioned - $allowance->non_positioned;
+                }
+                $allowanceCollection[] = [
+                    "allowances_name" => $allowance->allowances_name,
+                    "taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                    "non_taxable" => $netAllowance <= 0 ? $allowanceValue->non_positioned : $allowanceValue->non_positioned - $netAllowance,
+                ];
+            }else if($employee->position !== "normal_employee" && $allowance->positioned != NULL){
+                $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
+                if($allowance->isPercent){
+                    $netAllowance = $allowanceValue->positioned - ($allowance->positioned * $employee->basic_salary / 100);
+                }
+                else{
+                    $netAllowance = $allowanceValue->positioned - $allowance->positioned;
+                }
+                $allowanceCollection[] = [
+                    "allowances_name" => $allowance->allowances_name,
+                    "taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                    "non_taxable" => $netAllowance <= 0 ? $allowanceValue->positioned : $allowanceValue->positioned - $netAllowance,
+                ];
             }
+
+            
         }
         // return response()->json([
         //     'status' => 'success',
