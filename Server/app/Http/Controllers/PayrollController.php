@@ -289,52 +289,77 @@ class PayrollController extends Controller
     public function pay(Request $request)
     {
         DB::beginTransaction();
-        try{
-        $employerAccount = Account::where('account_number', '10088009400')->first();
-        $taxAuthorityAccount = Account::where('account_number', '1001111222211')->first();
-        $payrolls = Payroll::with('employee.account')->get();
-        $results = [];
-        foreach ($payrolls as $payroll) {
-            $employee = $payroll->employee;
-            $netPay = $payroll->net_pay ?? 0;
-            $incomeTax = $payroll->income_tax ?? 0;
+        try {
+            $employerAccount = Account::where('account_number', '10088009400')->first();
+            $taxAuthorityAccount = Account::where('account_number', '1001111222211')->first();
+           
+            $payrolls = Payroll::with('employee.account')->where('status', 'pending')->get();
+            // dd($payrolls);
+            $results = [];
+            foreach ($payrolls as $payroll) {
+                $employee = $payroll->employee;
+                $totlalDeductions = $payroll->total_deductions ?? 0;
+                $employer_pension = $payroll->employer_pension ?? 0;
+                $loan_or_penality = $payroll->loan_or_penality ?? 0;
+                $other_commissions = $payroll->other_commissions ?? 0;
+                $netPay = $payroll->net_pay ?? 0;
+                $incomeTax = $payroll->income_tax ?? 0;
 
-            if ($employerAccount && $netPay > 0) {
-                $employerAccount->balance -= $netPay;
-                $employerAccount->save();
-            }
-
-            if ($employee && $employee->bank_account_id && $netPay > 0) {
-                $employeeAccount = Account::where('id', $employee->bank_account_id)->first();
-                // dd($employeeAccount);
-                if ($employeeAccount) {
-                    $employeeAccount->balance += $netPay;
-                    $employeeAccount->save();
+                if ($employerAccount && $netPay > 0) {
+                    $employerAccount->balance -= $netPay;
+                    $employerAccount->balance -= $other_commissions;
+                    $employerAccount->balance += $loan_or_penality;
+                    $employerAccount->save();
                 }
-            }
 
-            if ($taxAuthorityAccount && $incomeTax > 0) {
-                $employerAccount->balance -= $incomeTax;
-                $taxAuthorityAccount->balance += $incomeTax;
-                $employerAccount->save();
-                $taxAuthorityAccount->save();
+                if ($employee && $employee->bank_account_id && $netPay > 0) {
+                    $employeeAccount = Account::where('id', $employee->bank_account_id)->first();
+                    // dd($employeeAccount);
+                    if ($employeeAccount) {
+                        $employeeAccount->balance += $netPay;
+                        $employeeAccount->balance += $other_commissions;
+                        $employeeAccount->balance -= $loan_or_penality;
+                        $employeeAccount->save();
+                    }
+                }
+
+                if ($taxAuthorityAccount && $incomeTax > 0) {
+                    $employerAccount->balance -= $totlalDeductions;
+                    $employerAccount->balance -= $employer_pension;
+                    $taxAuthorityAccount->balance += $totlalDeductions;
+                    $taxAuthorityAccount->balance += $employer_pension;
+                    $employerAccount->save();
+                    $taxAuthorityAccount->save();
+                }
+
+                $payroll->status = 'paid';
+                $payroll->save();
+
+                $results[] = [
+                    'payroll_id' => $payroll->id,
+                    'employee_id' => $employee->id ?? null,
+                    'net_pay' => $netPay,
+                    'income_tax' => $incomeTax,
+                ];
             }
-            $results[] = [
-                'payroll_id' => $payroll->id,
-                'employee_id' => $employee->id ?? null,
-                'net_pay' => $netPay,
-                'income_tax' => $incomeTax,
-            ];
-        }
-        DB::commit();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Payroll processed for all employees, balances and tax updated',
-            'results' => $results,
-        ]);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Payroll processed for all employees, balances and tax updated',
+                'results' => $results,
+            ]);
         } catch (\Exception $e) {
-        DB::rollBack();
-        return $e->getMessage();
+            DB::rollBack();
+            return $e->getMessage();
         }
     }
+
+    public function GetPendingPayrolls()
+    {
+        $payrolls = Payroll::with('employee')->where('status', 'pending')->get();
+
+        return response()->json(
+            $payrolls,
+        );
+    } 
 }
