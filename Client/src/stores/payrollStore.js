@@ -4,6 +4,7 @@ import router from "@/router";
 export const usePayrollStore = defineStore("payrollStore", {
   state: () => {
     return {
+      payrolls: [],
       errors: {},
     };
   },
@@ -113,6 +114,48 @@ export const usePayrollStore = defineStore("payrollStore", {
         return { success: false };
       }
     },
+    
+    async approvePayroll() {
+      const res = await fetch(`/api/pay`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();  
+    console.log(data)
+    this.payrolls = data;
+    return this.payrolls
+    if (data.errors) {
+      this.errors = data.errors;
+    } else {
+      this.errors = {};
+    }
+    
   },
+  
+  async pendingPayroll() {
+    const res = await fetch(`/api/payrolls/pending`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    console.log(data)
+    this.payrolls = data;
+    
+    return this.payrolls; 
+    if (data.errors) {
+      this.errors = data.errors;
+    } else {
+      this.errors = {};
+    }
+    
+  }
+},
+
 
 });

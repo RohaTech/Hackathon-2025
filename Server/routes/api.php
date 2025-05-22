@@ -19,7 +19,7 @@ use App\Models\Payroll;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-
+Route::get('/payrolls/pending', [PayrollController::class, 'GetPendingPayrolls']);
 Route::post('/pay', [PayrollController::class, 'pay']);
 Route::apiResource('/employees', EmployeeController::class);
 Route::apiResource('/accounts', AccountController::class);
