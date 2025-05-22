@@ -37,14 +37,13 @@ class PayrollController extends Controller
         $allowanceCollection = [];
 
         foreach ($allowances as $allowance) {
-                
+
             if ($employee->position == "ceo" && $allowance->ceo != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
                 // dd($allowanceValue);
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->ceo - ($allowance->ceo * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->ceo - $allowance->ceo;
                 }
                 $allowanceCollection[] = [
@@ -52,13 +51,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->ceo : $allowanceValue->ceo - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "coo" && $allowance->coo != NULL) {
+            } else if ($employee->position == "coo" && $allowance->coo != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->coo - ($allowance->coo * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->coo - $allowance->coo;
                 }
                 $allowanceCollection[] = [
@@ -66,13 +63,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->coo : $allowanceValue->coo - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "cto" && $allowance->cto != NULL) {
+            } else if ($employee->position == "cto" && $allowance->cto != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->cto - ($allowance->cto * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->cto - $allowance->cto;
                 }
                 $allowanceCollection[] = [
@@ -80,13 +75,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->cto : $allowanceValue->cto - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "ciso" && $allowance->ciso != NULL) {
+            } else if ($employee->position == "ciso" && $allowance->ciso != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->ciso - ($allowance->ciso * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->ciso - $allowance->ciso;
                 }
                 $allowanceCollection[] = [
@@ -94,13 +87,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->ciso : $allowanceValue->ciso - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "director" && $allowance->director != NULL) {
+            } else if ($employee->position == "director" && $allowance->director != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->director - ($allowance->director * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->director - $allowance->director;
                 }
                 $allowanceCollection[] = [
@@ -108,13 +99,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->director : $allowanceValue->director - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "dept_lead" && $allowance->dept_lead != NULL) {
+            } else if ($employee->position == "dept_lead" && $allowance->dept_lead != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->dept_lead - ($allowance->dept_lead * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->dept_lead - $allowance->dept_lead;
                 }
                 $allowanceCollection[] = [
@@ -122,13 +111,11 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->dept_lead : $allowanceValue->dept_lead - $netAllowance,
                 ];
-            }
-           else if ($employee->position == "normal_employee" && $allowance->normal_employee != NULL) {
+            } else if ($employee->position == "normal_employee" && $allowance->normal_employee != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
+                if ($allowance->isPercent) {
                     $netAllowance = $allowanceValue->normal_employee - ($allowance->normal_employee * $employee->basic_salary / 100);
-                }
-                else{
+                } else {
                     $netAllowance = $allowanceValue->normal_employee - $allowance->normal_employee;
                 }
                 $allowanceCollection[] = [
@@ -136,41 +123,41 @@ class PayrollController extends Controller
                     "taxable" => $netAllowance > 0 ? $netAllowance : 0,
                     "non_taxable" => $netAllowance <= 0 ? $allowanceValue->normal_employee : $allowanceValue->normal_employee - $netAllowance,
                 ];
-            }else if($employee->position == "normal_employee" && $allowance->non_positioned != NULL){
+            } else if ($employee->position == "normal_employee" && $allowance->non_positioned != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
-                    $netAllowance = $allowanceValue->non_positioned - ($allowance->non_positioned * $employee->basic_salary / 100);
+                if ($allowanceValue) {
+                    if ($allowance->isPercent) {
+                        $netAllowance = $allowanceValue->non_positioned - ($allowance->non_positioned * $employee->basic_salary / 100);
+                    } else {
+                        $netAllowance = $allowanceValue->non_positioned - $allowance->non_positioned;
+                    }
+                    $allowanceCollection[] = [
+                        "allowances_name" => $allowance->allowances_name,
+                        "taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                        "non_taxable" => $netAllowance <= 0 ? $allowanceValue->non_positioned : $allowanceValue->non_positioned - $netAllowance,
+                    ];
                 }
-                else{
-                    $netAllowance = $allowanceValue->non_positioned - $allowance->non_positioned;
-                }
-                $allowanceCollection[] = [
-                    "allowances_name" => $allowance->allowances_name,
-                    "taxable" => $netAllowance > 0 ? $netAllowance : 0,
-                    "non_taxable" => $netAllowance <= 0 ? $allowanceValue->non_positioned : $allowanceValue->non_positioned - $netAllowance,
-                ];
-            }else if($employee->position !== "normal_employee" && $allowance->positioned != NULL){
+            } else if ($employee->position !== "normal_employee" && $allowance->positioned != NULL) {
                 $allowanceValue = AllowanceValue::where('allowances_name', $allowance->allowances_name)->first();
-                if($allowance->isPercent){
-                    $netAllowance = $allowanceValue->positioned - ($allowance->positioned * $employee->basic_salary / 100);
+                if ($allowanceValue) {
+                    if ($allowance->isPercent) {
+                        $netAllowance = $allowanceValue->positioned - ($allowance->positioned * $employee->basic_salary / 100);
+                    } else {
+                        $netAllowance = $allowanceValue->positioned - $allowance->positioned;
+                    }
+                    $allowanceCollection[] = [
+                        "allowances_name" => $allowance->allowances_name,
+                        "taxable" => $netAllowance > 0 ? $netAllowance : 0,
+                        "non_taxable" => $netAllowance <= 0 ? $allowanceValue->positioned : $allowanceValue->positioned - $netAllowance,
+                    ];
                 }
-                else{
-                    $netAllowance = $allowanceValue->positioned - $allowance->positioned;
-                }
-                $allowanceCollection[] = [
-                    "allowances_name" => $allowance->allowances_name,
-                    "taxable" => $netAllowance > 0 ? $netAllowance : 0,
-                    "non_taxable" => $netAllowance <= 0 ? $allowanceValue->positioned : $allowanceValue->positioned - $netAllowance,
-                ];
             }
-
-            
         }
         // return response()->json([
         //     'status' => 'success',
         //     'allowances' => $allowanceCollection,
         // ]);
-        
+
         $taxable_income = 0;
         $non_taxable_income = 0;
         $other_commissions = $request->other_commissions;
@@ -178,13 +165,11 @@ class PayrollController extends Controller
             if ($allowance['taxable'] > 0 && $allowance['non_taxable'] > 0) {
                 $taxable_income += $allowance['taxable'];
                 $non_taxable_income += $allowance['non_taxable'];
-            } 
-            else if ($allowance['taxable'] > 0) {
+            } else if ($allowance['taxable'] > 0) {
                 $taxable_income += $allowance['taxable'];
-            }
-            else if ($allowance['non_taxable'] > 0) {
+            } else if ($allowance['non_taxable'] > 0) {
                 $non_taxable_income += $allowance['non_taxable'];
-            }else{
+            } else {
                 $non_taxable_income += 0;
             }
         }
@@ -202,28 +187,28 @@ class PayrollController extends Controller
         $taxable_income = $gross_pay - $non_taxable_income;
         // dd($taxable_income);
 
-        if($employee->basic_salary >0 && $employee->basic_salary <= 600){
+        if ($employee->basic_salary > 0 && $employee->basic_salary <= 600) {
             $income_tax = 0;
-        }else if($employee->basic_salary > 600 && $employee->basic_salary <= 1650){
+        } else if ($employee->basic_salary > 600 && $employee->basic_salary <= 1650) {
             $income_tax = $taxable_income * 0.1;
-        }else if($employee->basic_salary > 1650 && $employee->basic_salary <= 3200){
+        } else if ($employee->basic_salary > 1650 && $employee->basic_salary <= 3200) {
             $income_tax = $taxable_income * 0.15;
-        }else if($employee->basic_salary > 3200 && $employee->basic_salary <= 5250){
+        } else if ($employee->basic_salary > 3200 && $employee->basic_salary <= 5250) {
             $income_tax = $taxable_income * 0.2;
-        }else if($employee->basic_salary > 5250 && $employee->basic_salary <= 7800){
+        } else if ($employee->basic_salary > 5250 && $employee->basic_salary <= 7800) {
             $income_tax = $taxable_income * 0.25;
-        }else if($employee->basic_salary > 7800 && $employee->basic_salary <= 10900){
+        } else if ($employee->basic_salary > 7800 && $employee->basic_salary <= 10900) {
             $income_tax = $taxable_income * 0.3;
-        }else if($employee->basic_salary > 10900){
+        } else if ($employee->basic_salary > 10900) {
             $income_tax = $taxable_income * 0.35;
         }
 
 
-        if($employee->employement_type == "full_time"){
+        if ($employee->employement_type == "full_time") {
             $employee_pension = $employee->basic_salary * 0.07;
-        }else if($employee->employement_type == "part_time"){
+        } else if ($employee->employement_type == "part_time") {
             $employee_pension = 0;
-        }else{
+        } else {
             $employee_pension = 0;
             $employer_pension = 0;
         }
@@ -254,8 +239,6 @@ class PayrollController extends Controller
                 'net_pay' => $net_pay,
             ],
         ]);
-
-
     }
 
     /**

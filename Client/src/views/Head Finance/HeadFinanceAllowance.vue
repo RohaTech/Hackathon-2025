@@ -51,6 +51,16 @@ const saveProfile = async () => {
   console.log("Allowance saved");
   console.log(formData.value);
   isAddAllowanceModal.value = false;
+  formData.value.ceo = null;
+  formData.value.coo = null;
+  formData.value.cto = null;
+  formData.value.ciso = null;
+  formData.value.director = null;
+  formData.value.dept_lead = null;
+  formData.value.normal_employee = null;
+  formData.value.non_positioned = null;
+  formData.value.positioned = null;
+  formData.value.isPercent = false;
 };
 const HandleUpdateAllowance = async () => {
   await updateAllowance(updatedAllowanceData.value, selectedAllowance.value.id);

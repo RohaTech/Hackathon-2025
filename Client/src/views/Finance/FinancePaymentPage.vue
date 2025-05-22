@@ -21,13 +21,30 @@ const formData = ref({
   working_days: "",
   other_commissions: "",
   loan_or_penality: "",
+  month: "",
 });
 
 const saveProfile = async () => {
+  if (formData.value.working_days > 30) {
+    alert("Working days cannot exceed 30");
+    return;
+  }
   console.log(formData.value);
   await createPayroll(formData.value);
   console.log("Profile saved");
-  isProfileInfoModal.value = false;
+  closeModal();
+};
+
+const closeModal = () => {
+  isAddPaymentModal.value = false;
+
+  formData.value = {
+    employee_id: "",
+    working_days: "",
+    other_commissions: "",
+    loan_or_penality: "",
+    month: "",
+  };
 };
 </script>
 
@@ -51,7 +68,7 @@ const saveProfile = async () => {
         >
           <!-- close btn -->
           <button
-            @click="isAddPaymentModal = false"
+            @click="closeModal"
             class="transition-color absolute right-5 top-5 z-999 flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 ark:bg-white/[0.05] ark:text-gray-400 ark:hover:bg-white/[0.07] ark:hover:text-gray-300"
           >
             <svg
@@ -113,6 +130,7 @@ const saveProfile = async () => {
                   <input
                     type="number"
                     value="0"
+                    max="30"
                     required
                     v-model="formData.working_days"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
@@ -146,11 +164,38 @@ const saveProfile = async () => {
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
+
+                <div>
+                  <label
+                    class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
+                  >
+                    Month
+                  </label>
+                  <select
+                    v-model="formData.month"
+                    required
+                    class="w-full border rounded px-3 py-2 capitalize ark:bg-ark-900 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90"
+                  >
+                    <option value="" disabled>Select month</option>
+                    <option value="January">January</option>
+                    <option value="February">February</option>
+                    <option value="March">March</option>
+                    <option value="April">April</option>
+                    <option value="May">May</option>
+                    <option value="June">June</option>
+                    <option value="July">July</option>
+                    <option value="August">August</option>
+                    <option value="September">September</option>
+                    <option value="October">October</option>
+                    <option value="November">November</option>
+                    <option value="December">December</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="flex items-center gap-3 mt-6 lg:justify-end">
               <button
-                @click="isAddAllowanceModal = false"
+                @click="closeModal"
                 type="button"
                 class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ark:border-gray-700 ark:bg-gray-800 ark:text-gray-400 ark:hover:bg-white/[0.03] sm:w-auto"
               >
