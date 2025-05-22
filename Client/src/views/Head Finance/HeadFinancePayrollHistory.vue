@@ -34,67 +34,106 @@ const allowanceColumns = computed(() => {
   return Array.from(names);
 });
 
-const excelFields = computed(() => ({
-  "Employee Name": "name",
-  "Employment Date": "employement_date",
-  "Basic Salary": "basic_salary",
-  "Working Days": "working_days",
-  "Earned Salary": "earned_salary",
-  ...allowanceColumns.value.reduce((acc, name) => {
-    acc[name] = name;
-    return acc;
-  }, {}),
-  "Other Commissions": "other_commissions",
-  "Gross Pay": "gross_pay",
-  "Taxable Income": "taxable_income",
-  "Income Tax": "income_tax",
-  "Employee Pension": "employee_pension",
-  "Employer Pension": "employer_pension",
-  "Total Pension": "total_pension",
-  "Loan or Penalty": "loan_or_penality",
-  "Total Deductions": "total_deductions",
-  "Net Pay": "net_pay",
-}));
+const calculateTotals = (data) => {
+  const totals = {
+    name: "TOTAL",
+    employement_date: "",
+  };
+
+  // Initialize all numeric fields to 0
+  data.forEach((item) => {
+    for (const key in item) {
+      if (typeof item[key] === "number" && !totals.hasOwnProperty(key)) {
+        totals[key] = 0;
+      }
+    }
+  });
+
+  // Sum up all numeric values
+  data.forEach((item) => {
+    for (const key in item) {
+      if (typeof item[key] === "number") {
+        totals[key] += item[key];
+      }
+    }
+  });
+
+  return totals;
+};
 
 onMounted(async () => {
   payrolls.value = await getAllPayrolls();
-  console.log("Filtered Payrolls:", filteredPayrolls.value);
+  console.log(filteredPayrolls.value);
 
-  dataExcel.value = filteredPayrolls.value.map((item) => ({
-    name: item.employee.name,
-    employement_date: item.employee.employement_date,
-    basic_salary: item.employee.basic_salary,
-    working_days: item.working_days,
-    ...item.allowances.reduce((acc, a) => {
-      acc[a.allowances_name] = a.amount;
-      return acc;
-    }, {}),
-    earned_salary: item.earned_salary,
-    other_commissions: item.other_commissions,
-    gross_pay: item.gross_pay,
-    taxable_income: item.taxable_income,
-    income_tax: item.income_tax,
-    employee_pension: item.employee_pension,
-    employer_pension: item.employer_pension,
-    total_pension: item.employer_pension + item.employee_pension,
-    loan_or_penality: item.loan_or_penality,
-    total_deductions: item.total_deductions,
-    net_pay: item.net_pay,
-  }));
+  filteredPayrolls.value.forEach((item) => {
+    const excelItem = {
+      name: item.employee.name,
+      employement_date: item.employee.employement_date,
+      basic_salary: item.employee.basic_salary,
+      working_days: item.working_days,
+      earned_salary: item.earned_salary,
+      other_commissions: item.other_commissions,
+      gross_pay: item.gross_pay,
+      taxable_income: item.taxable_income,
+      income_tax: item.income_tax,
+      employee_pension: item.employee_pension,
+      employer_pension: item.employer_pension,
+      total_pension: item.employer_pension + item.employee_pension,
+      loan_or_penality: item.loan_or_penality,
+      total_deductions: item.total_deductions,
+      net_pay: item.net_pay,
+    };
 
-  console.log("Data Excel:", dataExcel.value);
-  console.log("Excel Fields:", excelFields.value);
+    // Dynamically add allowances to the excel item
+    item.allowances.forEach((allowance) => {
+      excelItem[`allowance_${allowance.allowances_name}`] =
+        allowance.non_taxable;
+    });
+
+    dataExcel.value.push(excelItem);
+  });
+
+  // Add totals row
+  if (dataExcel.value.length > 0) {
+    dataExcel.value.push(calculateTotals(dataExcel.value));
+  }
+});
+
+const excelFields = computed(() => {
+  const fields = {
+    "Employee Name": "name",
+    "Employment Date": "employement_date",
+    "Basic Salary": "basic_salary",
+    "Working Days": "working_days",
+    "Earned Salary": "earned_salary",
+    other_commissions: "other_commissions",
+    gross_pay: "gross_pay",
+    taxable_income: "taxable_income",
+    income_tax: "income_tax",
+    employee_pension: "employee_pension",
+    employer_pension: "employer_pension",
+    total_pension: "total_pension",
+    loan_or_penality: "loan_or_penality",
+    total_deductions: "total_deductions",
+    net_pay: "net_pay",
+  };
+
+  // Dynamically add allowance fields
+  allowanceColumns.value.forEach((allowanceName) => {
+    fields[`Allowance: ${allowanceName}`] = `allowance_${allowanceName}`;
+  });
+
+  return fields;
 });
 
 const test = () => {
-  console.log("Data Excel:", dataExcel.value);
-  console.log("Excel Fields:", excelFields.value);
+  console.log(dataExcel.value);
 };
 </script>
 
 <template>
   <HeadFinanceLayout>
-    <p>HeadFinancePayrollHistory</p>
+    <p class="">HeadFinancePayrollHistory</p>
 
     <export-excel
       :data="dataExcel"
