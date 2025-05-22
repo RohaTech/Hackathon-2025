@@ -304,7 +304,7 @@ class PayrollController extends Controller
     public function pay(Request $request)
     {
         $employerAccount = Account::where('account_number', '10088009400')->first();
-        $taxAuthorityAccount = Account::where('account_number', '1000412501394')->first();
+        $taxAuthorityAccount = Account::where('account_number', '1001111222211')->first();
         $payrolls = Payroll::with('employee.account')->get();
         $results = [];
         foreach ($payrolls as $payroll) {
