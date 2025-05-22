@@ -31,7 +31,7 @@ const HandleApprovePayroll = async () => {
   const response = await approvePayroll();
   if (response) {
     alert("Payroll approved successfully");
-    payrolls.value = await getAllPayrolls();
+    payrolls.value = await pendingPayroll();
   } else {
     alert("Failed to approve payroll");
   }
@@ -66,7 +66,7 @@ const saveProfile = async () => {
   }
   console.log(formData.value);
   await createPayroll(formData.value);
-  payrolls.value = await getAllPayrolls();
+  payrolls.value = await pendingPayroll();
 
   console.log("Profile saved");
   closeModal();

@@ -11,10 +11,8 @@
         <tr>
             <td align="center">
                 <!-- Main Content Container -->
-                <svg
-      :class="props.class"
+    <svg
       viewBox="0 0 225 224"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clip-path="url(#clip0_268_25)">
@@ -142,7 +140,7 @@
       </g>
       <defs>
         <clipPath id="clip0_268_25">
-          <rect width="225" height="224" fill="white" />
+          <rect width="200" height="200" fill="white" />
         </clipPath>
       </defs>
     </svg>
@@ -150,10 +148,9 @@
                     <!-- Header -->
                     <tr>
                         <td style="padding: 40px 30px;">
-                            <h1 style="font-size: 24px; font-weight: bold; color: #0F172A; margin: 0 0 20px;">Hello, {{ $name }}!</h1>
-                            <p style="font-size: 16px; line-height: 1.5; color: #333333; margin: 0 0 20px;">
+                            <h1 style="font-size: 24px; font-weight: bold; color: #0a5098; margin: 0 0 20px;">Hello, {{ $name }}!</h1>
+                            <p style="font-size: 16px; line-height: 1.5; color: #f3a21b; margin: 0 0 20px;">
                                 We have sent you this email to confirm your that we have sent you your salary for this month.
-
                             </p>
                             {{-- <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 20px 0;">
                                 <tr>
