@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { useEmployeeStore } from "@/stores/employee";
 import { usePayrollStore } from "@/stores/payrollStore";
@@ -11,21 +11,64 @@ const payrolls = ref([]);
 
 onMounted(async () => {
   payrolls.value = await getAllPayrolls();
-  console.log(payrolls.value);
 });
 
-const series = ref([
+// Process payroll data to get monthly sums
+const monthlyData = computed(() => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Initialize data structure for all months
+  const data = months.map((month) => ({
+    month,
+    netPay: 0,
+    employerPension: 0,
+    totalDeductions: 0,
+  }));
+
+  // Process each payroll record
+  payrolls.value.forEach((payroll) => {
+    const monthIndex = months.findIndex((m) => m === payroll.month);
+    if (monthIndex !== -1) {
+      data[monthIndex].netPay += payroll.net_pay;
+      data[monthIndex].employerPension += payroll.employer_pension;
+      data[monthIndex].totalDeductions += payroll.total_deductions;
+    }
+  });
+
+  return data;
+});
+
+// Chart series data
+const series = computed(() => [
   {
-    name: "Sales",
-    data: [
-      39215.38, 29815.38, 32940.81, 57200, 24893.26, 32145.21, 29105.21,
-      110872.12,
-    ],
+    name: "Net Pay",
+    data: monthlyData.value.map((item) => item.netPay),
+  },
+  {
+    name: "Employer Pension",
+    data: monthlyData.value.map((item) => item.employerPension),
+  },
+  {
+    name: "Total Deductions",
+    data: monthlyData.value.map((item) => item.totalDeductions),
   },
 ]);
 
 const chartOptions = ref({
-  colors: ["#465fff"],
+  colors: ["#465fff", "#4CAF50", "#FF9800"],
   chart: {
     fontFamily: "Outfit, sans-serif",
     type: "bar",
@@ -81,7 +124,9 @@ const chartOptions = ref({
     },
   },
   yaxis: {
-    title: false,
+    title: {
+      text: "Amount (ETB)",
+    },
   },
   grid: {
     yaxis: {
@@ -94,19 +139,12 @@ const chartOptions = ref({
     opacity: 1,
   },
   tooltip: {
-    x: {
-      show: false,
-    },
     y: {
       formatter: function (val) {
-        return val.toString();
+        return "ETB " + val.toLocaleString();
       },
     },
   },
-});
-
-onMounted(() => {
-  // Any additional setup can be done here if needed
 });
 </script>
 
@@ -116,7 +154,7 @@ onMounted(() => {
   >
     <div class="flex items-center justify-between">
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-        Monthly Sales
+        This Month Payroll Summary
       </h3>
     </div>
 
