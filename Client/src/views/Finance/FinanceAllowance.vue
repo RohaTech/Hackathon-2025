@@ -155,7 +155,7 @@ watchEffect(() => {
             <h4
               class="mb-2 text-2xl font-semibold text-gray-800 ark:text-white/90"
             >
-              Add Allowance Value
+              Add Allowance Value In Birr
             </h4>
           </div>
 
