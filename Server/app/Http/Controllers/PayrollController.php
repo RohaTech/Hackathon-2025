@@ -28,6 +28,13 @@ class PayrollController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'employee_id' => 'required|exists:employees,id',
+            'working_days' => 'required|integer',
+            'other_commissions' => 'nullable|numeric',
+            'loan_or_penality' => 'nullable|numeric',
+            'month' => 'required|string|max:255',
+        ]);
         $employee = Employee::find($request->employee_id);
         $earned_salary = $request->working_days * ($employee->basic_salary / 30);
         // dd($earned_salary);
@@ -174,11 +181,6 @@ class PayrollController extends Controller
             }
         }
 
-        // $taxable_allowances_sum = $allowanceCollection->sum('taxable');
-
-        // $non_taxable_income = $allowanceCollection->sum('non_taxable');
-        // dd($taxable_income , $non_taxable_income);
-
         // dd($earned_salary);
         $other_commissions = $request->other_commissions;
         $gross_pay = $earned_salary + $taxable_income + $non_taxable_income + $other_commissions;
@@ -214,36 +216,38 @@ class PayrollController extends Controller
         }
 
         $employer_pension = $employee->basic_salary * 0.11;
-        $loan_or_penality = $request->loan_or_penality;
+        if ($request->loan_or_penality) {
+            $loan_or_penality = $request->loan_or_penality;
+        } else {
+            $loan_or_penality = 0;
+        }
         $total_deductions = $income_tax + $employee_pension + $loan_or_penality;
         $net_pay = $gross_pay - $total_deductions;
+        $month = $request->month;
+
+        $payroll = Payroll::create([
+            'employee_id' => $employee->id,
+            'working_days' => $request->working_days,
+            'earned_salary' => $earned_salary,
+            'allowances' => json_encode($allowanceCollection),
+            'other_commissions' => $other_commissions,
+            'gross_pay' => $gross_pay,
+            'taxable_income' => $taxable_income,
+            'income_tax' => $income_tax,
+            'employee_pension' => $employee_pension,
+            'employer_pension' => $employer_pension,
+            'loan_or_penality' => $loan_or_penality,
+            'total_deductions' => $total_deductions,
+            'net_pay' => $net_pay,
+            'month' => $month,
+        ]);
 
         return response()->json([
             'status' => 'success',
-            'payroll' => [
-                'employee_id' => $employee->id,
-                'employee_name' => $employee->name,
-                'employee_email' => $employee->email,
-                'employee_position' => $employee->position,
-                'working_days' => $request->working_days,
-                'earned_salary' => $earned_salary,
-                'allowances' => $allowanceCollection,
-                'other_commissions' => $other_commissions,
-                'gross_pay' => $gross_pay,
-                'taxable_income' => $taxable_income,
-                'income_tax' => $income_tax,
-                'employee_pension' => $employee_pension,
-                'employer_pension' => $employer_pension,
-                'loan_or_penality' => $loan_or_penality,
-                'total_deductions' => $total_deductions,
-                'net_pay' => $net_pay,
-            ],
-        ]);
+            'payroll' => $payroll
+        ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Payroll $payroll)
     {
         return response()->json([
