@@ -77,7 +77,7 @@ const toggleApplicationMenu = () => {
             />
           </svg>
         </button>
-        <Logo />
+
         <button
           @click="toggleApplicationMenu"
           class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden"
