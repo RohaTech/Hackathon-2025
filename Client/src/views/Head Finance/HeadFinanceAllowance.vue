@@ -81,6 +81,7 @@ const handleToggle = () => {
 };
 const handlePercentToggle = () => {
   formData.value.isPercent = !formData.value.isPercent;
+  console.log(formData.value.isPercent);
 };
 const openDetailPopup = (allowance) => {
   selectedAllowance.value = allowance;

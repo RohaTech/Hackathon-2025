@@ -22,6 +22,8 @@ class AllowanceController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $validatedData = $request->validate([
             'allowances_name' => 'string|required|max:255',
             'ceo' => 'numeric|nullable',
@@ -33,6 +35,7 @@ class AllowanceController extends Controller
             'normal_employee' => 'numeric|nullable',
             'positioned' => 'numeric|nullable',
             'non_positioned' => 'numeric|nullable',
+            'isPercent' => 'boolean|nullable',
 
         ]);
 
