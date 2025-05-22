@@ -20,6 +20,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::post('/pay', [PayrollController::class, 'pay']);
 Route::apiResource('/employees', EmployeeController::class);
 Route::apiResource('/accounts', AccountController::class);
 Route::apiResource('/payrolls', PayrollController::class);
