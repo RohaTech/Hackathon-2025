@@ -8,6 +8,7 @@ use App\Models\AllowanceValue;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PayrollController extends Controller
 {
@@ -303,6 +304,8 @@ class PayrollController extends Controller
 
     public function pay(Request $request)
     {
+        DB::beginTransaction();
+        try{
         $employerAccount = Account::where('account_number', '10088009400')->first();
         $taxAuthorityAccount = Account::where('account_number', '1001111222211')->first();
         $payrolls = Payroll::with('employee.account')->get();
@@ -339,10 +342,15 @@ class PayrollController extends Controller
                 'income_tax' => $incomeTax,
             ];
         }
+        DB::commit();
         return response()->json([
             'status' => 'success',
             'message' => 'Payroll processed for all employees, balances and tax updated',
             'results' => $results,
         ]);
+        } catch (\Exception $e) {
+        DB::rollBack();
+        return $e->getMessage();
+        }
     }
 }
