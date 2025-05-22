@@ -1,4 +1,20 @@
-<script setup></script>
+<script setup>
+import { useEmployeeStore } from "@/stores/employee";
+import { usePayrollStore } from "@/stores/payrollStore";
+import { onMounted, ref } from "vue";
+
+const { getEmployees } = useEmployeeStore();
+const { getAllPayrolls } = usePayrollStore();
+
+const employees = ref([]);
+const payrolls = ref([]);
+
+onMounted(async () => {
+  employees.value = await getEmployees();
+  payrolls.value = await getAllPayrolls();
+  // console.log(payrolls.value);
+});
+</script>
 
 <template>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
@@ -25,7 +41,10 @@
         </svg>
       </div>
 
-      <div class="flex items-end justify-between mt-5">
+      <div
+        v-if="employees.length > 0"
+        class="flex items-end justify-between mt-5"
+      >
         <div>
           <span class="text-sm text-gray-500 dark:text-gray-400"
             >Employees</span
@@ -33,7 +52,7 @@
           <h4
             class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90"
           >
-            3,782
+            {{ employees.length }}
           </h4>
         </div>
       </div>

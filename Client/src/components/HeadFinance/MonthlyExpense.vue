@@ -1,6 +1,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { useEmployeeStore } from "@/stores/employee";
+import { usePayrollStore } from "@/stores/payrollStore";
+
+const { getEmployees } = useEmployeeStore();
+const { getAllPayrolls } = usePayrollStore();
+
+const payrolls = ref([]);
+
+onMounted(async () => {
+  payrolls.value = await getAllPayrolls();
+  console.log(payrolls.value);
+});
 
 const series = ref([
   {

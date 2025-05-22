@@ -11,6 +11,7 @@ import HeadFinancePayrollHistory from '@/views/Head Finance/HeadFinancePayrollHi
 import HeadFinanceDashboard from '@/views/Head Finance/HeadFinanceDashboard.vue'
 import HeadFinanceAllowance from '@/views/Head Finance/HeadFinanceAllowance.vue'
 import FinanceAllowance from '@/views/Finance/FinanceAllowance.vue'
+import FinancePayrollHistory from '@/views/Finance/FinancePayrollHistory.vue'
 
 
 
@@ -48,6 +49,13 @@ const router = createRouter({
       path: '/finance/allowance',
       name: 'FinanceAllowance',
       component: FinanceAllowance,
+      meta: { finance: true },
+
+    },
+    {
+      path: '/finance/payroll-history',
+      name: 'FinancePayrollHistory',
+      component: FinancePayrollHistory,
       meta: { finance: true },
 
     },
