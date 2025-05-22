@@ -23,6 +23,7 @@ class Payroll extends Model
         'loan_or_penality',
         'total_deductions',
         'net_pay',
+        'month',
     ];
 
     public function employee()

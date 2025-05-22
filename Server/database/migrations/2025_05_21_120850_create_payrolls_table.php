@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('employer_pension', 10, 2)->default(0);
             $table->decimal('loan_or_penality', 10, 2)->default(0);
             $table->decimal('total_deductions', 10, 2)->default(0);
+            $table->string('month');
             $table->decimal('net_pay', 10, 2)->default(0);
             $table->timestamps();
         });

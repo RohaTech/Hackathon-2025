@@ -21,5 +21,6 @@ class Allowance extends Model
         "normal_employee",
         "positioned",
         "non_positioned",
+        "isPercent",
     ];
 }
