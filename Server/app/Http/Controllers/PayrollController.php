@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Allowance;
 use App\Models\AllowanceValue;
 use App\Models\Employee;
@@ -300,11 +301,48 @@ class PayrollController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Payroll $payroll)
+    public function pay(Request $request)
     {
-        //
+        $employerAccount = Account::where('account_number', '10088009400')->first();
+        $taxAuthorityAccount = Account::where('account_number', '1000412501394')->first();
+        $payrolls = Payroll::with('employee.account')->get();
+        $results = [];
+        foreach ($payrolls as $payroll) {
+            $employee = $payroll->employee;
+            $netPay = $payroll->net_pay ?? 0;
+            $incomeTax = $payroll->income_tax ?? 0;
+
+            if ($employerAccount && $netPay > 0) {
+                $employerAccount->balance -= $netPay;
+                $employerAccount->save();
+            }
+
+            if ($employee && $employee->bank_account_id && $netPay > 0) {
+                $employeeAccount = Account::where('id', $employee->bank_account_id)->first();
+                // dd($employeeAccount);
+                if ($employeeAccount) {
+                    $employeeAccount->balance += $netPay;
+                    $employeeAccount->save();
+                }
+            }
+
+            if ($taxAuthorityAccount && $incomeTax > 0) {
+                $employerAccount->balance -= $incomeTax;
+                $taxAuthorityAccount->balance += $incomeTax;
+                $employerAccount->save();
+                $taxAuthorityAccount->save();
+            }
+            $results[] = [
+                'payroll_id' => $payroll->id,
+                'employee_id' => $employee->id ?? null,
+                'net_pay' => $netPay,
+                'income_tax' => $incomeTax,
+            ];
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payroll processed for all employees, balances and tax updated',
+            'results' => $results,
+        ]);
     }
 }
