@@ -17,10 +17,9 @@ class PayrollController extends Controller
     {
         $payrolls = Payroll::with('employee')->get();
 
-        return response()->json([
-            'status' => 'success',
-            'payrolls' => $payrolls,
-        ]);
+        return response()->json(
+            $payrolls,
+        );
     }
 
     /**
@@ -192,17 +191,17 @@ class PayrollController extends Controller
         if ($employee->basic_salary > 0 && $employee->basic_salary <= 600) {
             $income_tax = 0;
         } else if ($employee->basic_salary > 600 && $employee->basic_salary <= 1650) {
-            $income_tax = $taxable_income * 0.1;
+            $income_tax = ($taxable_income * 0.1) - 60;
         } else if ($employee->basic_salary > 1650 && $employee->basic_salary <= 3200) {
-            $income_tax = $taxable_income * 0.15;
+            $income_tax = ($taxable_income * 0.15) - 142.5;
         } else if ($employee->basic_salary > 3200 && $employee->basic_salary <= 5250) {
-            $income_tax = $taxable_income * 0.2;
+            $income_tax = ($taxable_income * 0.2) - 302.5;
         } else if ($employee->basic_salary > 5250 && $employee->basic_salary <= 7800) {
-            $income_tax = $taxable_income * 0.25;
+            $income_tax = ($taxable_income * 0.25) - 565;
         } else if ($employee->basic_salary > 7800 && $employee->basic_salary <= 10900) {
-            $income_tax = $taxable_income * 0.3;
+            $income_tax = ($taxable_income * 0.3) - 955;
         } else if ($employee->basic_salary > 10900) {
-            $income_tax = $taxable_income * 0.35;
+            $income_tax = ($taxable_income * 0.35) - 1500;
         }
 
 
