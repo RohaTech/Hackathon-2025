@@ -125,15 +125,11 @@ const excelFields = computed(() => {
 
   return fields;
 });
-
-const test = () => {
-  console.log(dataExcel.value);
-};
 </script>
 
 <template>
   <HeadFinanceLayout>
-    <p class="">HeadFinancePayrollHistory</p>
+    <p class="">Export Payroll Excel</p>
 
     <export-excel
       :data="dataExcel"
@@ -153,11 +149,5 @@ const test = () => {
         Download Excel
       </button>
     </export-excel>
-    <button
-      @click="test"
-      class="flex mt-10 items-center w-fit justify-center rounded-lg bg-[#0a5098] px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-[#f3a21b]"
-    >
-      Test Excel
-    </button>
   </HeadFinanceLayout>
 </template>
