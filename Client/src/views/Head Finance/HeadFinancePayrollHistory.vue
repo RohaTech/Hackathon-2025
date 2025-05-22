@@ -3,8 +3,11 @@ import HeadFinanceLayout from "@/layout/HeadFinanceLayout.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useEmployeeStore } from "@/stores/employee";
 import { onMounted, ref } from "vue";
+import { usePayrollStore } from "@/stores/payrollStore";
 
 const { getEmployees } = useEmployeeStore();
+const { getAllPayrolls } = usePayrollStore();
+
 const authStore = useAuthStore();
 const employees = ref([]);
 const dataExcel = ref([]);
@@ -65,7 +68,7 @@ const test = () => {
       @click="test"
       class="flex mt-10 items-center w-fit justify-center rounded-lg bg-[#0a5098] px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-[#f3a21b]"
     >
-      Download Excel
+      Test Excel
     </button>
   </HeadFinanceLayout>
 </template>
