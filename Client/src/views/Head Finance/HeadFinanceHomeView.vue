@@ -31,7 +31,7 @@ const HandleApprovePayroll = async () => {
   const response = await approvePayroll();
   if (response) {
     alert("Payroll approved successfully");
-    payrolls.value = await getAllPayrolls();
+    payrolls.value = await pendingPayroll();
   } else {
     alert("Failed to approve payroll");
   }
@@ -66,7 +66,7 @@ const saveProfile = async () => {
   }
   console.log(formData.value);
   await createPayroll(formData.value);
-  payrolls.value = await getAllPayrolls();
+  payrolls.value = await pendingPayroll();
 
   console.log("Profile saved");
   closeModal();
@@ -105,7 +105,8 @@ function closeDetailModal() {
       <h1 class="font-bold text-xl">Payroll</h1>
       <button
         @click="HandleApprovePayroll"
-        class="bg-white px-4 py-3 text-sm text-gray-700 ring-1 ring-inset ring-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300 inline-flex items-center justify-center font-medium gap-2 rounded-lg transition w-fit ml-auto mr-6 hover:bg-[#f3a21b] hover:text-white"
+        :disabled="!payrolls.length"
+        class="bg-white px-4 py-3 text-sm text-gray-700 ring-1 ring-inset ring-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] rk:hover:text-gray-300 inline-flex items-center justify-center font-medium gap-2 rounded-lg transition w-fit ml-auto mr-6"
       >
        Approve Payment
       </button>

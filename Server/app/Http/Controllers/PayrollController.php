@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeEmail;
 use App\Models\Account;
 use App\Models\Allowance;
 use App\Models\AllowanceValue;
@@ -9,6 +10,7 @@ use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class PayrollController extends Controller
 {
@@ -334,6 +336,8 @@ class PayrollController extends Controller
 
                 $payroll->status = 'paid';
                 $payroll->save();
+
+                Mail::to($employee->email)->send(new WelcomeEmail($employee));
 
                 $results[] = [
                     'payroll_id' => $payroll->id,
