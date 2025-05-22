@@ -74,11 +74,8 @@ const saveProfile = async () => {
             <h4
               class="mb-2 text-2xl font-semibold text-gray-800 ark:text-white/90"
             >
-              Edit Address
+              ADD NEW PAYMENT
             </h4>
-            <p class="mb-6 text-sm text-gray-500 ark:text-gray-400 lg:mb-7">
-              Update your details to keep your profile up-to-date.
-            </p>
           </div>
           <form class="flex flex-col mt-8">
             <div class="px-2 overflow-y-auto custom-scrollbar">
