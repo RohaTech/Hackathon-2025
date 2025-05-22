@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Allowance;
+use App\Models\AllowanceValue;
 use Illuminate\Http\Request;
 
 
-class AllowanceController extends Controller
+class AllowanceValueController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $allowances = Allowance::all();
+        $allowances = AllowanceValue::all();
         return response()->json($allowances);
     }
 
@@ -22,7 +22,6 @@ class AllowanceController extends Controller
      */
     public function store(Request $request)
     {
-
 
         $validatedData = $request->validate([
             'allowances_name' => 'string|required|max:255',
@@ -35,23 +34,22 @@ class AllowanceController extends Controller
             'normal_employee' => 'numeric|nullable',
             'positioned' => 'numeric|nullable',
             'non_positioned' => 'numeric|nullable',
-            'isPercent' => 'boolean|nullable',
 
         ]);
 
-        $allowance = Allowance::create(
+        $allowanceValue = AllowanceValue::create(
             $validatedData
         );
 
         return response()->json([
-            'allowance' => $allowance,
+            'allowanceValue' => $allowanceValue,
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Allowance $allowance)
+    public function show(AllowanceValue $allowanceValue)
     {
         //
     }
@@ -59,8 +57,11 @@ class AllowanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Allowance $allowance)
+    public function update(Request $request,   $id)
     {
+
+        $allowanceValue = AllowanceValue::find($id);
+
         $validatedData = $request->validate([
             'allowances_name' => 'sometimes|string|required|max:255',
             'ceo' => 'sometimes|numeric|nullable',
@@ -75,19 +76,21 @@ class AllowanceController extends Controller
 
         ]);
 
-        $allowance->update($validatedData);
+        $allowanceValue->update($validatedData);
 
         return response()->json([
             'message' => 'Allowance updated successfully',
-            'allowance' => $allowance
+            'allowance' => $allowanceValue
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Allowance $allowance)
+    public function destroy($id)
     {
-        $allowance->delete();
+
+        $allowanceValue = AllowanceValue::find($id);
+        return $allowanceValue->delete();
     }
 }

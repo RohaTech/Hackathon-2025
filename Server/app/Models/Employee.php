@@ -29,4 +29,8 @@ class Employee extends Model
     {
         return $this->hasOne(Account::class,'id');
     }
+    public function payroll() : HasOne
+    {
+        return $this->hasOne(Payroll::class,'employee_id');
+    }
 }

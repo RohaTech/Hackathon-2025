@@ -1,15 +1,18 @@
-<script setup>
-const props = defineProps({
-  class: String,
-});
-</script>
-
-<template>
-  <RouterLink :to="{ name: 'Welcome' }">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Your Qelem Meda Mini Payroll System Registration</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f4; color: #333333;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4; padding: 20px;">
+        <tr>
+            <td align="center">
+                <!-- Main Content Container -->
     <svg
-      :class="props.class"
       viewBox="0 0 225 224"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clip-path="url(#clip0_268_25)">
@@ -25,8 +28,7 @@ const props = defineProps({
           d="M1.87646 99.9378C9.08371 53.3246 34.658 21.8684 79.9209 6.38835C88.3709 5.09643 96.1848 3.55081 104.399 2.02325C105.867 2.02917 106.934 2.01705 108.093 2.17183C108.453 2.21501 108.721 2.09128 108.98 1.97112C108.969 1.97468 108.955 1.93717 109.376 1.9554C111.865 1.64909 113.932 1.32455 116 1C118.7 1 121.4 1 124.55 1C129.724 2.28532 134.448 3.57063 139.529 5.26464C138.361 6.41564 136.693 8.00082 135.333 7.77061C120.81 5.31248 106.501 7.44995 92.7489 11.3274C81.7597 14.4258 71.2596 19.6598 61.0541 24.9357C57.0725 26.9941 54.4907 31.7603 51.2713 35.2931C51.2713 35.2931 51.0894 35.2866 50.791 35.1996C46.7751 37.8743 42.696 40.2767 39.4678 43.5247C37.3298 45.6758 36.4115 49.0391 34.9471 51.8598C34.9471 51.8598 34.9705 51.9483 34.5642 51.9702C32.7616 53.0167 31.0351 53.7876 30.0224 55.1066C23.0679 64.1649 17.9129 74.0267 14.1538 84.9788C10.6784 95.1041 8.46956 105.194 8.02664 115.766C7.84228 120.166 7.99445 124.58 7.9941 128.988C7.99375 133.478 7.99402 137.968 7.99402 142.457C6.31481 140.367 5.72258 137.849 4.97346 135.379C4.11959 132.564 3.12583 129.791 2.19287 127C2.09822 126.275 2.00357 125.55 2.16654 124.236C2.25074 122.083 2.07733 120.518 1.93506 118.59C1.93386 117.498 1.90151 116.77 1.90438 115.608C1.91611 113.436 1.89264 111.697 1.90844 109.596C1.93332 108.504 1.91892 107.775 2.20185 106.793C2.29161 104.339 2.08404 102.139 1.87646 99.9378Z"
           fill="#0F549D"
         />
-        <path
-          d="M103.999 2.00518C96.1848 3.55079 88.3709 5.0964 80.2944 6.38965C86.5723 4.66846 93.1127 3.19964 99.8266 1.3654C101.067 0.999979 102.133 0.999979 103.58 1.25125C103.972 1.67008 103.986 1.83763 103.999 2.00518Z"
+        <pathd="M103.999 2.00518C96.1848 3.55079 88.3709 5.0964 80.2944 6.38965C86.5723 4.66846 93.1127 3.19964 99.8266 1.3654C101.067 0.999979 102.133 0.999979 103.58 1.25125C103.972 1.67008 103.986 1.83763 103.999 2.00518Z"
           fill="#0B509C"
         />
         <path
@@ -65,8 +67,7 @@ const props = defineProps({
           d="M170.886 205.082C168.008 206.523 165.185 207.441 162.467 208.604C126.319 224.071 92.6757 219.672 61.4556 195.936C60.9337 195.539 60.5278 194.99 60.1011 194.155C62.2706 194.807 64.4244 195.781 66.5405 196.831C82.7825 204.891 99.8227 209.264 118.643 208.236C119.466 208.326 119.728 208.22 119.99 208.114C121.057 208.027 122.124 207.94 123.84 208.197C129.111 207.808 133.781 207.292 138.329 206.243C140.348 205.778 142.118 204.236 144.002 203.183C144.156 203.109 144.311 203.035 144.902 202.934C145.578 202.815 145.773 202.666 145.924 202.46C149.803 200.672 153.624 198.744 157.573 197.128C164.163 194.431 169.901 197.734 170.886 205.082Z"
           fill="#0F549D"
         />
-        <path
-          d="M192.544 59.8049C201.187 68.0144 207.108 77.9567 211.114 89.0442C219.941 113.479 218.963 137.623 208.766 161.465C207.991 163.276 207.491 165.205 206.85 167.464C199.969 168.083 196.113 162.717 198.38 156.035C200.23 150.581 202.132 145.145 204.507 139.257C206.99 134.759 209.144 130.732 207.108 126.016C207.095 125.561 207.081 125.107 207.517 124.23C207.975 121.871 207.985 119.934 207.995 117.998C207.942 114.638 207.89 111.278 208.197 107.193C208.364 103.077 208.725 99.5368 207.858 96.3287C206.272 90.4559 203.959 84.7793 201.95 79.0208C201.95 79.0208 202.008 79.0245 201.943 78.8481C201.776 78.4113 201.608 78.2052 201.373 78.0536C198.336 72.036 195.298 66.0184 192.544 59.8049Z"
+        <pathd="M192.544 59.8049C201.187 68.0144 207.108 77.9567 211.114 89.0442C219.941 113.479 218.963 137.623 208.766 161.465C207.991 163.276 207.491 165.205 206.85 167.464C199.969 168.083 196.113 162.717 198.38 156.035C200.23 150.581 202.132 145.145 204.507 139.257C206.99 134.759 209.144 130.732 207.108 126.016C207.095 125.561 207.081 125.107 207.517 124.23C207.975 121.871 207.985 119.934 207.995 117.998C207.942 114.638 207.89 111.278 208.197 107.193C208.364 103.077 208.725 99.5368 207.858 96.3287C206.272 90.4559 203.959 84.7793 201.95 79.0208C201.95 79.0208 202.008 79.0245 201.943 78.8481C201.776 78.4113 201.608 78.2052 201.373 78.0536C198.336 72.036 195.298 66.0184 192.544 59.8049Z"
           fill="#0E539D"
         />
         <path
@@ -113,8 +114,7 @@ const props = defineProps({
           d="M35.2249 51.6869C36.4115 49.0392 37.3298 45.6758 39.4678 43.5247C42.696 40.2767 46.7751 37.8744 50.879 35.192C46.0111 40.6856 40.7568 46.0998 35.2249 51.6869Z"
           fill="#0F549E"
         />
-        <path
-          d="M11.8209 139.632C11.5377 139.124 11.2833 138.282 11.0627 137.091C11.3476 137.593 11.5987 138.445 11.8209 139.632Z"
+        <pathd="M11.8209 139.632C11.5377 139.124 11.2833 138.282 11.0627 137.091C11.3476 137.593 11.5987 138.445 11.8209 139.632Z"
           fill="#15539A"
         />
         <path
@@ -140,9 +140,46 @@ const props = defineProps({
       </g>
       <defs>
         <clipPath id="clip0_268_25">
-          <rect width="225" height="224" fill="white" />
+          <rect width="200" height="200" fill="white" />
         </clipPath>
       </defs>
     </svg>
-  </RouterLink>
-</template>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h1 style="font-size: 24px; font-weight: bold; color: #0a5098; margin: 0 0 20px;">Hello, {{ $name }}!</h1>
+                            <p style="font-size: 16px; line-height: 1.5; color: #f3a21b; margin: 0 0 20px;">
+                                We have sent you this email to confirm your that we have sent you your salary for this month.
+                            </p>
+                            {{-- <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 20px 0;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{ url('/doctor-status') }}" style="display: inline-block; padding: 12px 24px; background-color: #26C6DA; color: #ffffff; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 25px; transition: background-color 0.3s;">
+                                          
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table> --}}
+                            <p style="font-size: 14px; line-height: 1.5; color: #64748B; margin: 20px 0 0;">
+                                <strong>Tip:</strong> Please check your spam or junk folder if you don’t see our emails. Add <a href="mailto:no-reply@tenadam.com" style="color: #26C6DA; text-decoration: none;">no-reply@qelemmeda.com</a> to your contacts to ensure delivery.
+                            </p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f3f5f5; padding: 20px 30px; text-align: center;">
+                            <p style="font-size: 14px; color: #64748B; margin: 0 0 10px;">
+                                Need help? Contact our support team at <a href="mailto:support@tenadam.com" style="color: #26C6DA; text-decoration: none;">support@qelemmeda.com</a>.
+                            </p>
+                            <p style="font-size: 14px; color: #64748B; margin: 0;">
+                                &copy; {{ date('Y') }} Qelem Meda Technologies. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

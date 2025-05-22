@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Allowance extends Model
+class AllowanceValue extends Model
 {
-    /** @use HasFactory<\Database\Factories\AllowanceFactory> */
+    /** @use HasFactory<\Database\Factories\AllowanceValueFactory> */
     use HasFactory;
 
     protected $fillable  = [
@@ -21,6 +21,5 @@ class Allowance extends Model
         "normal_employee",
         "positioned",
         "non_positioned",
-        "isPercent",
     ];
 }

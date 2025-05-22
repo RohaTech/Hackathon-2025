@@ -77,7 +77,7 @@ const toggleApplicationMenu = () => {
             />
           </svg>
         </button>
-        <Logo />
+
         <button
           @click="toggleApplicationMenu"
           class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden"
@@ -106,7 +106,6 @@ const toggleApplicationMenu = () => {
       >
         <div class="2xsm:gap-3 flex items-center gap-2">
           <div class=""></div>
-          <FinanceNotificationMenu />
         </div>
         <FinanceUserMenu />
       </div>

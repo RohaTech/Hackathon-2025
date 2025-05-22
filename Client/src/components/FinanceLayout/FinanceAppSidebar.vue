@@ -41,9 +41,19 @@ const menuGroups = [
         path: "FinanceEmployee",
       },
       {
+        icon: TableIcon,
+        name: "Allowance",
+        path: "FinanceAllowance",
+      },
+      {
         icon: ListIcon,
         name: "Payroll",
         path: "FinancePayment",
+      },
+      {
+        icon: CalenderIcon,
+        name: "Payroll History",
+        path: "FinancePayrollHistory",
       },
     ],
   },

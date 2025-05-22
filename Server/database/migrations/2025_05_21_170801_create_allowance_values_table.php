@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allowances', function (Blueprint $table) {
+        Schema::create('allowance_values', function (Blueprint $table) {
             $table->id();
             $table->string('allowances_name');
             $table->decimal('ceo')->nullable();
@@ -23,16 +23,15 @@ return new class extends Migration
             $table->decimal('normal_employee')->nullable();
             $table->decimal('positioned')->nullable();
             $table->decimal('non_positioned')->nullable();
-            $table->boolean('isPercent')->default(false);
             $table->timestamps();
         });
     }
 
-    /**s
+    /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('allowances');
+        Schema::dropIfExists('allowance_values');
     }
 };

@@ -175,7 +175,7 @@ const handleSubmit = () => {
         </div>
 
         <div
-          class="ark:bg-white/5 relative hidden h-full w-full items-center bg-[#0a5098] lg:grid lg:w-1/2"
+          class="ark:bg-white/5 relative hidden h-full w-full items-center bg-black lg:grid lg:w-1/2"
         >
           <div class="z-1 flex items-center justify-center">
             <common-grid-shape />

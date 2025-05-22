@@ -1,14 +1,23 @@
 <script setup>
-import HeadFinanceLayout from "@/layout/HeadFinanceLayout.vue";
 import Modal from "@/components/UI/Modal.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { useAllowanceStore } from "@/stores/allowanceStore";
+import FinanceLayout from "@/layout/FinanceLayout.vue";
+import { useAllowanceValueStore } from "@/stores/allowanceValueStore";
 
 const isAddAllowanceModal = ref(false);
 const isAllowanceDetail = ref(false);
+const allowances = ref([]);
+const selectedAllowanceValue = ref([]);
 const selectedAllowance = ref([]);
-const { createAllowance, getAllAllowances, updateAllowance, deleteAllowance } =
-  useAllowanceStore();
+const {
+  createAllowanceValue,
+  getAllAllowanceValues,
+  updateAllowanceValue,
+  deleteAllowanceValue,
+} = useAllowanceValueStore();
+
+const { getAllAllowances } = useAllowanceStore();
 
 const formData = ref({
   allowances_name: "",
@@ -21,9 +30,8 @@ const formData = ref({
   normal_employee: null,
   positioned: null,
   non_positioned: null,
-  isPercent: false,
 });
-const updatedAllowanceData = ref({
+const updatedAllowanceValueData = ref({
   allowances_name: "",
   ceo: null,
   coo: null,
@@ -34,50 +42,58 @@ const updatedAllowanceData = ref({
   normal_employee: null,
   positioned: null,
   non_positioned: null,
-  isPercent: false,
 });
 
 const withPosition = ref(true);
-const allowances = ref([]);
+const allowancesValue = ref([]);
 
 onMounted(async () => {
+  allowancesValue.value = await getAllAllowanceValues();
   allowances.value = await getAllAllowances();
   console.log(allowances.value);
+  console.log(allowancesValue.value);
+});
+onMounted(async () => {
+  allowancesValue.value = await getAllAllowanceValues();
+  console.log(allowancesValue.value);
 });
 
 const saveProfile = async () => {
-  await createAllowance(formData.value);
-  allowances.value = await getAllAllowances();
+  await createAllowanceValue(formData.value);
+  allowancesValue.value = await getAllAllowanceValues();
   console.log("Allowance saved");
   console.log(formData.value);
   isAddAllowanceModal.value = false;
-  formData.value.ceo = null;
-  formData.value.coo = null;
-  formData.value.cto = null;
-  formData.value.ciso = null;
-  formData.value.director = null;
-  formData.value.dept_lead = null;
-  formData.value.normal_employee = null;
-  formData.value.non_positioned = null;
-  formData.value.positioned = null;
-  formData.value.isPercent = false;
 };
 const HandleUpdateAllowance = async () => {
-  await updateAllowance(updatedAllowanceData.value, selectedAllowance.value.id);
-  allowances.value = await getAllAllowances();
+  await updateAllowanceValue(
+    updatedAllowanceValueData.value,
+    selectedAllowanceValue.value.id
+  );
+  allowancesValue.value = await getAllAllowanceValues();
   console.log("Allowance Update");
-  console.log(updatedAllowanceData.value);
+  console.log(updatedAllowanceValueData.value);
   isAllowanceDetail.value = false;
 };
 const HandleDeleteAllowance = async () => {
-  await deleteAllowance(selectedAllowance.value.id);
-  allowances.value = await getAllAllowances();
+  await deleteAllowanceValue(selectedAllowanceValue.value.id);
+  allowancesValue.value = await getAllAllowanceValues();
   console.log("Allowance Deleted");
   isAllowanceDetail.value = false;
 };
 
-const handleToggle = () => {
-  withPosition.value = !withPosition.value;
+const openDetailPopup = (allowance) => {
+  selectedAllowanceValue.value = allowance;
+  isAllowanceDetail.value = true;
+  updatedAllowanceValueData.value = selectedAllowanceValue.value;
+  console.log(updatedAllowanceValueData.value);
+};
+
+watchEffect(() => {
+  console.log(selectedAllowance.value);
+
+  formData.value.allowances_name = selectedAllowance.value.allowances_name;
+
   formData.value.ceo = null;
   formData.value.coo = null;
   formData.value.cto = null;
@@ -87,30 +103,25 @@ const handleToggle = () => {
   formData.value.normal_employee = null;
   formData.value.non_positioned = null;
   formData.value.positioned = null;
-  formData.value.isPercent = false;
-};
-const handlePercentToggle = () => {
-  formData.value.isPercent = !formData.value.isPercent;
-  console.log(formData.value.isPercent);
-};
-const openDetailPopup = (allowance) => {
-  selectedAllowance.value = allowance;
-  isAllowanceDetail.value = true;
-  updatedAllowanceData.value = selectedAllowance.value;
-  console.log(updatedAllowanceData.value);
-};
+
+  if (selectedAllowance.value.positioned == null) {
+    withPosition.value = true;
+  } else if (selectedAllowance.value.positioned >= 0) {
+    withPosition.value = false;
+  }
+});
 </script>
 
 <template>
-  <HeadFinanceLayout>
-    <h1 class="font-bold text-xl">Allowance Deduction Rules</h1>
+  <FinanceLayout>
+    <h1 class="font-bold text-xl">Payroll</h1>
 
     <div class="px-4 w-full flex flex-col">
       <button
         @click="isAddAllowanceModal = true"
         class="bg-white px-4 py-3 text-sm text-gray-700 ring-1 ring-inset ring-gray-300 ark:bg-gray-800 ark:text-gray-400 ark:ring-gray-700 ark:hover:bg-white/[0.03] ark:hover:text-gray-300 inline-flex items-center justify-center font-medium gap-2 rounded-lg transition w-fit ml-auto mr-6 hover:bg-[#f3a21b] hover:text-white"
       >
-        New Allowance
+        Add Allowance Value
       </button>
     </div>
 
@@ -144,67 +155,32 @@ const openDetailPopup = (allowance) => {
             <h4
               class="mb-2 text-2xl font-semibold text-gray-800 ark:text-white/90"
             >
-              Add New Allowance
+              Add Allowance Value In Birr
             </h4>
           </div>
 
-          <div class="flex gap-x-10 items-center my-6">
-            <div
-              class="flex gap-x-2 items-center cursor-pointer"
-              @click="handleToggle"
-            >
-              <div
-                class="rounded-full size-5 border-2 border-black"
-                :class="{ 'bg-[#0a5098] border-none': withPosition }"
-              ></div>
-              <span class="text-sm lowercase">With Specific Position</span>
-            </div>
-            <div
-              class="flex gap-x-2 items-center cursor-pointer"
-              @click="handleToggle"
-            >
-              <div
-                class="rounded-full size-5 border-2 border-black"
-                :class="{ 'bg-[#0a5098] border-none': !withPosition }"
-              ></div>
-              <span class="text-sm lowercase">Positioned/Non Positioned</span>
-            </div>
-          </div>
           <form class="flex flex-col mt-8">
             <div class="px-2 overflow-y-auto custom-scrollbar">
-              <div
-                class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2 transition-all ease-linear duration-300"
-              >
-                <div class="my-4">
-                  <label for="name" class="mb-1 block text-sm text-[#0F172A]">
-                    Allowance Name <span class="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="name"
-                    v-model="formData.allowances_name"
-                    type="text"
-                    class="ark:bg-dark-900 focus:outline-hidden ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
-                    placeholder="Enter Allowance Name"
-                    required
-                  />
-                  <!-- <p
-                  v-if="errors?.name"
-                  class="mt-2 text-xs font-semibold text-red-500"
+              <div class="my-4">
+                <label
+                  class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                 >
-                  {{ errors.name }}
-                </p> -->
-                </div>
+                  Allowance Type
+                </label>
 
-                <div
-                  class="flex gap-x-2 items-center cursor-pointer"
-                  @click="handlePercentToggle"
+                <select
+                  v-model="selectedAllowance"
+                  class="w-full border rounded px-3 py-2 capitalize"
                 >
-                  <div
-                    class="rounded-full size-6 border-2 border-black"
-                    :class="{ 'bg-[#0a5098] border-none': formData.isPercent }"
-                  ></div>
-                  <span class="text-sm">Is The Values Percent</span>
-                </div>
+                  <option
+                    v-for="(allowance, index) in allowances"
+                    :key="index"
+                    :value="allowance"
+                    class="capitalize"
+                  >
+                    {{ allowance.allowances_name }}
+                  </option>
+                </select>
               </div>
 
               <div
@@ -406,7 +382,7 @@ const openDetailPopup = (allowance) => {
                 <p
                   class="font-medium capitalize text-gray-500 text-theme-xs dark:text-gray-400"
                 >
-                  Is Percent
+                  Non Positioned Employee
                 </p>
               </th>
               <th class="px-5 py-3 text-left w-2/11 sm:px-6">
@@ -419,8 +395,31 @@ const openDetailPopup = (allowance) => {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-if="allowancesValue.length === 0">
+              <td colspan="7" class="px-5 py-8 text-center sm:px-6">
+                <div class="flex flex-col items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-12 w-12 text-gray-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p class="mt-2 text-base text-gray-500">No Allowance found</p>
+                </div>
+              </td>
+            </tr>
+
             <tr
-              v-for="(allowance, index) in allowances"
+              v-else
+              v-for="(allowance, index) in allowancesValue"
               :key="index"
               class="border-t border-gray-100 dark:border-gray-800"
             >
@@ -454,23 +453,15 @@ const openDetailPopup = (allowance) => {
                   }}
                 </p>
               </td>
-
               <td class="px-5 py-4 sm:px-6">
-                <span
-                  :class="[
-                    'rounded-full px-2 py-0.5 text-theme-xs font-medium',
-                    {
-                      'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-500':
-                        allowance.isPercent,
-                      'bg-error-50 text-error-700 dark:bg-error-500/15 dark:text-error-500':
-                        !allowance.isPercent,
-                    },
-                  ]"
-                >
-                  {{ allowance.isPercent ? "True" : "False" }}</span
-                >
+                <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                  {{
+                    allowance.non_positioned !== null
+                      ? allowance.non_positioned
+                      : "Not Specified"
+                  }}
+                </p>
               </td>
-
               <td class="px-5 py-4 sm:px-6">
                 <p
                   @click="openDetailPopup(allowance)"
@@ -526,7 +517,7 @@ const openDetailPopup = (allowance) => {
               </label>
               <input
                 id="name"
-                v-model="updatedAllowanceData.allowances_name"
+                v-model="updatedAllowanceValueData.allowances_name"
                 type="text"
                 class="ark:bg-dark-900 focus:outline-hidden ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-first-accent"
                 placeholder="Enter Allowance Name"
@@ -543,7 +534,7 @@ const openDetailPopup = (allowance) => {
               <div
                 class="grid grid-cols-1 gap-x-6 gap-y-2 lg:grid-cols-2 transition-all ease-linear duration-300"
               >
-                <div v-if="updatedAllowanceData.ceo !== null">
+                <div v-if="updatedAllowanceValueData.ceo !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -552,13 +543,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.ceo === null"
+                    :disabled="updatedAllowanceValueData.ceo === null"
                     required
-                    v-model="updatedAllowanceData.ceo"
+                    v-model="updatedAllowanceValueData.ceo"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.coo !== null">
+                <div v-if="updatedAllowanceValueData.coo !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -567,13 +558,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.coo === null"
+                    :disabled="updatedAllowanceValueData.coo === null"
                     required
-                    v-model="updatedAllowanceData.coo"
+                    v-model="updatedAllowanceValueData.coo"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.cto !== null">
+                <div v-if="updatedAllowanceValueData.cto !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -582,13 +573,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.cto === null"
+                    :disabled="updatedAllowanceValueData.cto === null"
                     required
-                    v-model="updatedAllowanceData.cto"
+                    v-model="updatedAllowanceValueData.cto"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.ciso !== null">
+                <div v-if="updatedAllowanceValueData.ciso !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -597,13 +588,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.ciso === null"
+                    :disabled="updatedAllowanceValueData.ciso === null"
                     required
-                    v-model="updatedAllowanceData.ciso"
+                    v-model="updatedAllowanceValueData.ciso"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.director !== null">
+                <div v-if="updatedAllowanceValueData.director !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -612,13 +603,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.director === null"
+                    :disabled="updatedAllowanceValueData.director === null"
                     required
-                    v-model="updatedAllowanceData.director"
+                    v-model="updatedAllowanceValueData.director"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.dept_lead !== null">
+                <div v-if="updatedAllowanceValueData.dept_lead !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -627,13 +618,13 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.dept_lead === null"
+                    :disabled="updatedAllowanceValueData.dept_lead === null"
                     required
-                    v-model="updatedAllowanceData.dept_lead"
+                    v-model="updatedAllowanceValueData.dept_lead"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.normal_employee !== null">
+                <div v-if="updatedAllowanceValueData.normal_employee !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -643,12 +634,14 @@ const openDetailPopup = (allowance) => {
                     type="number"
                     value="0"
                     required
-                    :disabled="updatedAllowanceData.normal_employee === null"
-                    v-model="updatedAllowanceData.normal_employee"
+                    :disabled="
+                      updatedAllowanceValueData.normal_employee === null
+                    "
+                    v-model="updatedAllowanceValueData.normal_employee"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.positioned !== null">
+                <div v-if="updatedAllowanceValueData.positioned !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -658,12 +651,12 @@ const openDetailPopup = (allowance) => {
                     type="number"
                     value="0"
                     required
-                    :disabled="updatedAllowanceData.positioned === null"
-                    v-model="updatedAllowanceData.positioned"
+                    :disabled="updatedAllowanceValueData.positioned === null"
+                    v-model="updatedAllowanceValueData.positioned"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
-                <div v-if="updatedAllowanceData.non_positioned !== null">
+                <div v-if="updatedAllowanceValueData.non_positioned !== null">
                   <label
                     class="mb-1.5 block uppercase text-sm font-medium text-gray-700 ark:text-gray-400"
                   >
@@ -672,9 +665,11 @@ const openDetailPopup = (allowance) => {
                   <input
                     type="number"
                     value="0"
-                    :disabled="updatedAllowanceData.non_positioned === null"
+                    :disabled="
+                      updatedAllowanceValueData.non_positioned === null
+                    "
                     required
-                    v-model="updatedAllowanceData.non_positioned"
+                    v-model="updatedAllowanceValueData.non_positioned"
                     class="ark:bg-ark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-[#2D479B]/10 ark:border-gray-700 ark:bg-gray-900 ark:text-white/90 ark:placeholder:text-white/30 ark:focus:border-brand-800"
                   />
                 </div>
@@ -708,5 +703,5 @@ const openDetailPopup = (allowance) => {
         </div>
       </template>
     </Modal>
-  </HeadFinanceLayout>
+  </FinanceLayout>
 </template>

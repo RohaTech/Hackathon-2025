@@ -23,7 +23,7 @@ const menuItems = [
 ];
 
 const fallbackImage =
-  "https://res.cloudinary.com/dqxy77qks/image/upload/v1747340223/4b42ed27-d4d8-4205-b44b-595b7060097d.png";
+  "https://res.cloudinary.com/dqxy77qks/image/upload/v1747871524/801437dc-3f1b-480a-b043-1491ff1a7925.png";
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
@@ -88,23 +88,6 @@ onUnmounted(() => {
         </span>
       </div>
 
-      <ul
-        class="ark:border-gray-800 flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4"
-      >
-        <li v-for="item in menuItems" :key="item.href">
-          <RouterLink
-            :to="item.href"
-            class="ark:text-gray-400 ark:hover:bg-white/5 ark:hover:text-gray-300 group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <!-- SVG icon would go here -->
-            <component
-              :is="item.icon"
-              class="ark:group-hover:text-gray-300 text-gray-500 group-hover:text-gray-700"
-            />
-            {{ item.text }}
-          </RouterLink>
-        </li>
-      </ul>
       <button
         @click="signOut"
         class="ark:text-gray-400 ark:hover:bg-white/5 ark:hover:text-gray-300 group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700"
