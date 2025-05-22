@@ -36,7 +36,7 @@ const menuGroups = [
       },
       {
         icon: ListIcon,
-        name: "Payroll History",
+        name: "Generate Payroll ",
         path: "HeadFinancePayrollHistory",
       },
       {

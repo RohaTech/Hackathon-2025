@@ -12,7 +12,7 @@ const payrolls = ref([]);
 onMounted(async () => {
   employees.value = await getEmployees();
   payrolls.value = await getAllPayrolls();
-  // console.log(payrolls.value);
+  console.log(payrolls.value);
 });
 </script>
 
